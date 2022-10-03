@@ -1,0 +1,2023 @@
+---
+title: "Data Science Certificate Notes"
+author: "Haoyi Wei"
+date: "2022-09-16"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: 
+      collapsed: false
+      smooth_scroll: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Course 1 The Data Scientist's Toolbox
+
+This is my notebook for Coursera's data science specialization
+certificate.
+
+## Week 1.1 Data Science in general
+
+### What is data science?
+
+Data Science: Using data to answer question.
+
+Data scientist: A data scientist is somebody who uses data to answer
+questions. A data scientist is somebody who combines the skills of
+software programmer, statistician and storyteller slash artist to
+extract the nuggets of gold hidden under mountains of data.
+
+Why do we need data science? We have rich data and tools to analyses
+real world questions.
+
+What is big data? There are a few qualities that characterize big data:
+Volume: huge amount of data Velocity: data is being generated and
+collected very fast Variety: The data we can analyse comes in many
+forms.
+
+Data Science skills? Substantive Expertise: We need to have enough
+expertise in the area Hacking skills: Computer programing skills:
+cleaning and formatting Math & Statistics Knowledge: Analyze.
+
+What is data? Wikipedia: A set of values of qualitative or quantitative
+variables. Measurements on a set of items.
+
+We examined different sources of data that you may encounter, and
+emphasized the lack of tidy datasets. Examples of messy datasets, where
+raw data needs to be wrangled into an interpretable form, can include
+sequencing data, census data, electronic medical records, etc.
+
+And finally, we return to our beliefs on the relationship between data
+and your question and emphasize the importance of question-first
+strategies. You could have all the data you could ever hope for, but if
+you don't have a question to start, the data is useless.
+
+Getting help Eric Raymond's ["How to ask questions the smart
+way"](http://www.catb.org/esr/faqs/smart-questions.html)
+
+The Data Science Process Every Data Science Project starts with a
+question that is to be answered with data. That means that forming the
+question is an important first step in the process. The second step is
+finding or generating the data you're going to use to answer that
+question. With the question solidified and data in hand, the data are
+then analyzed, first by exploring the data and then often by modeling
+the data, which means using some statistical or machine learning
+techniques to analyze the data and answer your question. After drawing
+conclusions from this analysis, the project has to be communicated to
+others. Sometimes this is a report you send to your boss or team at
+work. Other times it's a blog post. Often it's a presentation to a group
+of colleagues. Regardless, a data science project almost always involves
+some form of communication of the projects' findings. We'll walk through
+these steps using a data science project example below.
+
+Some cool data science projects: • [Text analysis of Trump's tweets
+confirms he writes only the (angrier) Android half, by David
+Robinson](http://varianceexplained.org/r/trump-tweets/) • [Where to Live
+in the US](http://www.masalmon.eu/2017/11/16/wheretoliveus/), by [Maelle
+Salmon](http://www.masalmon.eu/about/) • [Sexual Health Clinics in
+Toronto](https://sharlagelfand.netlify.com/posts/tidying-toronto-open-data/),
+by [Sharla Gelfand](https://sharlagelfand.netlify.com/about/) •
+["Hilary: the most poisoned baby name in US
+history"](https://hilaryparker.com/2013/01/30/hilary-the-most-poisoned-baby-name-in-us-history/)
+
+## Week 1.2 R software
+
+Installing R: R is both a programming language and an environment. How
+to download R.
+
+Installing R studio What is RStudio? RStudio is a graphical user
+interface for R, that allows you to write, edit and store code,
+generate, view and store plots, manage files, objects and dataframes,
+and integrate with version control systems -- to name a few of its
+functions.
+
+R packages There is a great website, RDocumentation, which is a search
+engine for packages and functions from CRAN, BioConductor, and GitHub
+(ie: the big three repositories) Installing from GitHub This is a more
+specific case that you probably won't run into too often. In the event
+you want to do this, you first must find the package you want on GitHub
+and take note of both the package name AND the author of the package.
+Check out this guide for installing from GitHub, but the general
+workflow is: 1. install.packages("devtools") - only run this if you
+don't already have devtools installed. If you've been following along
+with this lesson, you may have installed it when we were practicing
+installations using the R console 2. library(devtools) - more on what
+this command is doing immediately below this 3.
+install_github("author/package") replacing "author" and "package" with
+their GitHub username and the name of the package. Updating packages You
+can check what packages need an update with a call to the function
+old.packages() This will identify all packages that have been updated
+since you installed them/last updated them. To update all packages, use
+update.packages(). If you only want to update a specific package, just
+use once again install.packages("packagename") Unloading packages
+Sometimes you want to unload a package in the middle of a script - the
+package you have loaded may not play nicely with another package you
+want to use. To unload a given package you can use the detach()
+function. For example, detach("package:ggplot2", unload=TRUE) would
+unload the ggplot2 package (that we loaded earlier). Within the RStudio
+interface, in the Packages tab, you can simply unload a package by
+unchecking the box beside the package name. Uninstalling packages If you
+no longer want to have a package installed, you can simply uninstall it
+using the function remove.packages(). For example,
+remove.packages("ggplot2")
+
+Use vignettes to learn examples of the related packages. If you still
+have questions about what functions within a package are right for you
+or how to use them, many packages include "vignettes." These are
+extended help files, that include an overview of the package and its
+functions, but often they go the extra mile and include detailed
+examples of how to use the functions in plain words that you can follow
+along with to see how to use the package. To see the vignettes included
+in a package, you can use the browseVignettes() function. For example,
+let's look at the vignettes included in
+ggplot2:browseVignettes("ggplot2") . You should see that there are two
+included vignettes: "Extending ggplot2" and "Aesthetic specifications."
+Exploring the Aesthetic specifications vignette is a great example of
+how vignettes can be helpful, clear instructions on how to use the
+included functions.
+
+## Week 1.3 Version Control
+
+Version Control Version control systems help to solve this problem by
+keeping a single, updated version of each file, with a record of all
+previous versions AND a record of exactly what changed between the
+versions. Git is a free and open source version control system Github is
+a cloud-based management system for your verision controlled files.
+Version control vocabulary There is a lot of vocabulary involved in
+working with Git, and often the understanding of one word relies on your
+understanding of a different Git concept. Take some time to familiarize
+yourself with the words below and read over it a few times to see how
+the concepts relate. Repository: Equivalent to the project's
+folder/directory - all of your version controlled files (and the
+recorded changes) are located in a repository. This is often shortened
+to repo. Repositories are what are hosted on GitHub and through this
+interface you can either keep your repositories private and share them
+with select collaborators, or you can make them public - anybody can see
+your files and their history. Commit: To commit is to save your edits
+and the changes made. A commit is like a snapshot of your files: Git
+compares the previous version of all of your files in the repo to the
+current version and identifies those that have changed since then. Those
+that have not changed, it maintains that previously stored file,
+untouched. Those that have changed, it compares the files, logs the
+changes and uploads the new version of your file. We'll touch on this in
+the next section, but when you commit a file, typically you accompany
+that file change with a little note about what you changed and why. When
+we talk about version control systems, commits are at the heart of them.
+If you find a mistake, you revert your files to a previous commit. If
+you want to see what has changed in a file over time, you compare the
+commits and look at the messages to see why and who. Push: Updating the
+repository with your edits. Since Git involves making changes locally,
+you need to be able to share your changes with the common, online
+repository. Pushing is sending those committed changes to that
+repository, so now everybody has access to your edits. Pull: Updating
+your local version of the repository to the current version, since
+others may have edited in the meanwhile. Because the shared repository
+is hosted online and any of your collaborators (or even yourself on a
+different computer!) could have made changes to the files and then
+pushed them to the shared repository, you are behind the times! The
+files you have locally on your computer may be outdated, so you pull to
+check if you are up to date with the main repository. Staging: The act
+of preparing a file for a commit. For example, if since your last commit
+you have edited three files for completely different reasons, you don't
+want to commit all of the changes in one go; your message on why you are
+making the commit and what has changed will be complicated since three
+files have been changed for different reasons. So instead, you can stage
+just one of the files and prepare it for committing. Once you've
+committed that file, you can stage the second file and commit it. And so
+on. Staging allows you to separate out file changes into separate
+commits. Very helpful!
+
+To summarize these commonly used terms so far and to test whether you've
+got the hang of this, files are hosted in a repository that is shared
+online with collaborators. You pull the repository's contents so that
+you have a local copy of the files that you can edit. Once you are happy
+with your changes to a file, you stage the file and then commit it. You
+push this commit to the shared repository. This uploads your new file
+and all of the changes and is accompanied by a message explaining what
+changed, why and by whom.
+
+Github and Git Install git and configure it for the use with Github, in
+preparation for linking it with RStudio.
+
+Linking Git/GitHub and RStudio Not work for my mac. I just downloaded
+the git app to the mac. The terminal way is very bad.
+
+## Week 1.4 Misc.
+
+### Types of Data Science Questions
+
+-   Descriptive
+    -   The goal of descriptive analysis is to describe or summarize a
+        set of data.
+        -   common descriptive statistics: measures of central tendency
+            (eg: mean, median, mode) or measures of variability (eg:
+            range, standard deviations or variance).
+-   Exploratory
+    -   The goal of exploratory analysis is to examine or explore the
+        data and find relationships that weren't previously known.
+        (correlation)
+-   Inferential
+    -   The goal of inferential analyses is to use a relatively small
+        sample of data to infer or say something about the population at
+        large. (correlation)
+-   Predictive
+    -   The goal of predictive analysis is to use current data to make
+        predictions about future data.
+-   Causal
+    -   looking at the cause and effect of a relationship.
+-   Mechanistic
+    -   understand the exact changes in variables that lead to exact
+        changes in other variables.
+
+### Experimental Design
+
+As a data scientist, you are a scientist and as such, need to have the
+ability to design proper experiments to best answer your data science
+questions!
+
+### What does experimental design mean?
+
+Experimental design is organizing an experiment so that you have the
+correct data (and enough of it!) to clearly and effectively answer your
+data science question.
+
+Some terms: \* dependent variables, \* independet variables, \*
+confounder. + an extraneous variable that may affect the relationship
+between the dependent and independent variables.
+
+#### p-heck
+
+p-value. This is a value that tells you the probability that the results
+of your experiment were observed by chance
+
+[What is a p-value](https://www.youtube.com/watch?v=UsU-O2Z1rAs)
+
+### Big Data
+
+#### What is big data?
+
+three qualities that are commonly attributed to big data sets: Volume,
+Velocity, Variety. From these three adjectives, we can see that big data
+involves large data sets of diverse data types that are being generated
+very rapidly.
+
+
+```{r}
+# # The Data Scientist's Toolbox
+# ###########
+# # Week 1
+# ###########
+# # create a matrix
+# example <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 4, ncol = 2)
+# 
+# # install packages
+# # 1. install from CRAN
+# # install.packages(c("ggplot2","devtools","lme4"))
+# 
+# # 2. Installing from Bioconductor (another repository)
+# # source("https://bioconductor.org/biocLite.R")
+# # This makes the main install function of BioConductor, biocLite(), available to you. Following this, you call the package you want to install in quotes, between the parentheses of the biocLite command, like so: biocLite("GenomicFeatures")
+# # BiocLite()
+# # BiocLite("GenomicFeatures")
+# 
+# # know the version and session info:
+# version
+# sessionInfo()
+# 
+# browseVignettes("ggplot2")
+# 
+# ###########
+# # Week 4
+# ###########
+# 
+# # R markdown
+# 
+# install.packages("rmarkdown")
+# tinytex::install_tinytex()
+# 
+# 
+# # install book down package
+# install.packages("bookdown")
+```
+
+
+
+# Course 2 R Programming
+
+## Week 2.1 R-Basics.
+
+R is have five data type: vector, matrcies,list,factor,dataframe. R have
+five class: numeric, integer, complex,character, logical. R object can
+have attributes:dimension, length, class,name.
+
+### R data type
+
+R have five basic or "atomic" classes of objects: \* character \*
+numeric(real numbers) \* integer \* complex \* logical (True/False)
+
+The most basic object is a vector. A vector can only contain objects of
+the same class
+
+A list can contain objects of different classes.
+
+### Attributes
+
+R objects can have attributes \* names, dimnames \* dimensions (e.g.
+matrices, arrays) \* class \* length \* other user-defined
+attributes/metadata
+
+Attributes of an object can be accessed using the attributes() function
+
+### Data Structure
+
+Vector: Vectors are the most basic R data objects and there are five
+types of atomic vectors. They are logical, integer, numeric, complex,
+character. List: Lists are a special type of vector that can contain
+elements of different classes. Matrices:Matrices are vectors with a
+dimension attribute. Arrary can have more than two dimensions. Factor: Factors are used to represent categorical
+data. Data frame: They are represented as a special type of list where
+every element of the list have the same length.
+
+#### Data Structure - Vectors
+
+Vectors are the most basic R data objects and there are five types of
+atomic vectors. They are logical, integer, numeric, complex, character.
+The c() function can be used to create vectors of objects.
+
+```{r}
+x <-c(0.5, 0.6)  ## numeric
+x <-c(T,T)       ## logical
+x <-c("a","b","c") ## character
+x <- 9:29        ## integer
+x <-c(1+0i,2+4i) ## complex
+```
+
+Using the vector() function, by default it will intialize the vector
+value.
+
+```{r}
+x <-vector("numeric",length=10)
+x
+```
+
+##### Implicit Coercion (Mixing Objects)
+
+What if you create a vector containing different class of objects. When
+different objects are mixed in a vector, coercion occurs so that every
+element in the vector is of the same class.
+
+```{r}
+y <-c(1.7,"a")   # numeric and character = character
+class(y)        
+y <-c(T,2)       # logical and numeric = numeric
+class(y)
+y<-c("a",T)      # character and logical = character
+class(y)
+
+# character less common than logical, logical less common than numeric.
+
+```
+
+So what happens if you take a vect you create a vector and you mix two
+different types of objects and so the general it that is that r. Will
+kind of create the least common denominator vector so, will not give you
+an error but what will happen is that it will coerce the vector to be
+the, the class that's kind of the least common denominator. So here, in
+the first example, I've got in trouble concatenating number 1.7 and
+letter a, so clearly these are not in the same class one is numeric, and
+the other is character. So the least common denominator here, is going
+to be character. And so we're, so what you're going to get is that y is
+going to be a character vector, where the first element is going to be
+the string 1.7 and the second element's going to be the, the letter A so
+in the second example here, I've got concatenating true, which is a
+logical, and a two, which is numeric.
+
+##### Explicit Coercion
+
+Objects can be explicitly coerced from one class to another using the
+as.\* functions, if available.
+
+```{r}
+x <-0:6
+class(x)
+as.numeric(x)
+as.logical(x)
+as.character(x)
+```
+
+Nonsensical coercion results in NAs.
+
+```{r}
+x <-c("a","b","c")
+as.numeric(x)
+as.logical(x)
+as.complex(x)
+
+```
+
+#### Data Structure - Lists
+
+Lists are a special type of vector that can contain elements of
+different classes. Lists are a very important data type in R and you
+should get to know them well.
+
+```{r}
+x <- list(1,"a",T,1+4i)
+x
+
+```
+
+So you can see that in the double brackets here so the, the elements are
+indexed by double brackets so the first element is the vector 1. The
+second element is a vector with A. The third element is a vector with
+true and the fourth element is a vector. With the complex number 1 +
+(4i). So lists are indexed you'll notice that el, elements of a list
+will have double brackets around them elements of other vectors just
+have the single brackets, so that's one way to separate a list from
+other types of vectors
+
+#### Data Structure - Matrices
+
+Matrices are vectors with a dimension attribute. The dimension attribute
+is itself an integer vector of length 2 (nrow,ncol).
+
+```{r}
+m <-matrix(nrow =2,ncol=3)
+m
+
+dim(m)
+attributes(m)
+```
+
+Matrices are constructed column-wise, so entries can be thought of
+starting in the "upper left" corner and running down the columns.
+
+```{r}
+m <- matrix(1:6, nrow=2,ncol=3)
+m
+```
+
+Matrices can also be created directly from vectors by adding a dimension
+attribute.
+
+```{r}
+m <- 1:10
+m
+dim(m) <- c(2,5)
+m
+```
+
+Matrices can be created by column-bingding or row-binding with cbind()
+and rbind()
+
+```{r}
+x <- 1:3
+y <- 10:12
+cbind(x,y)
+
+rbind(x,y)
+
+
+```
+
+#### Data Structure - Factors
+
+Factors are used to represent categorical data. Factors can be unordered
+or ordered. One can think of a factor as an integer vector where each
+integer has a label. \* Factors are treated specially by modelling
+functions like lm() and glm() \* Using factors with labels is better
+than using integers because factors are self-describing; having a
+variable that has values "male" and "female' is better than a variables
+that has values 1 and 2.
+
+```{r}
+x <- factor(c("yes","yes","no","yes","no"))
+x
+table(x)
+unclass(x) # show how R coded the factor
+attr(x,"levels")
+```
+
+The order of the levels can be set using the levels argument to
+factor(). This can be important in linear modelling because the first
+level is used as the baseline level.
+
+```{r}
+x <- factor(c("yes","yes","no","yes","no"),levels=c("yes","no"))
+x
+table(x)
+unclass(x) # show how R coded the factor
+attr(x,"levels")
+```
+
+#### Data Structure - Data Frames
+
+Data Frames are used to store tabular data \* They are represented as a
+special type of list where every element of the list have the same
+length. \* unlike matrices, data frames can store different classes of
+objects in each column. Matrices must have every element be the same
+class. \* Data frames also have a speecial attribute called row.names \*
+can be converted to a matrix by calling data.matrix()
+
+### Subsetting
+
+#### Subsetting - Basics
+
+There are a number of operators that can be used to extract subsets of R
+objects. \* [always returns an object of the same class as the orignial;
+can be used to select more than one element. \* [[ is used to extract
+elements of a list or a data frame; it can only be used to extract a
+single element and the class of the returned object will not necessarily
+be a list of data frame. \* \$ is used to extract elements of a list or
+data frame by name; semantics are similar to [.
+
+```{r}
+x <- c("a","b","c","c","d","a")
+x[1]
+x[2]
+x[1:4]
+
+# subsetting using the name
+x[x >"a"] #lexcical order
+u <-x >"a"
+u
+```
+
+#### Subsetting - Lists
+
+```{r}
+# subsetting Lists
+x <- list(foo =1:4, bar=0.6)
+x
+x[1] # a list
+x[[1]] # the sequence ; a vector
+x$bar 
+x[["bar"]]
+x["bar"]
+
+
+# extract multiple element in a list
+x <-list(foo=1:4, bar=0.6, baz="hello")
+x[c(1,3)] # I want the first and the third element.
+
+```
+
+The [[ operator can be used with computed indices; \$ can only be used
+with literal names.
+
+```{r}
+x <- list(foo=1:4, bar=0.6, baz="hello")
+name <- "foo" # computed index for 'foo'
+x[[name]] 
+x$name # element 'name' doesn't exist
+```
+
+Subsetting Nested elements of a list. The [[ can take an integer
+sequence.
+
+```{r}
+x <-list(a=list(10,12,14), b=c(3.14,2.81))
+x[[c(1,3)]]
+x[[1]][[3]]
+x[[c(2,1)]]
+
+```
+
+#### Subsetting - Matrices
+
+matrices can be subsetted in the usual way with (i,j) type indices.
+
+```{r}
+x <- matrix(1:6,2,3)
+x[1,2]
+x[2,1]
+x[1,]
+x[,2]
+
+# By default, when a signle element of a matrix is retrieved, it is returned as a vector of length 1 rather than a 1*1 matrix. This behavior can be turned off by setting drop=F
+
+x[1,2]
+
+x[1,2,drop=F] # always return element with same class.
+
+```
+
+#### Subsetting - Partial Matching
+
+```{r}
+# Partial matching of names is allowed with [[ and $
+   x <- list(aardaark=1:5)  
+x$a
+x[["a"]]
+x[["a", exact=F]]
+
+y <-list(aaax=1:5,aaab=6:9)
+y$a
+```
+
+#### Subsetting - Removing Missing Values
+
+```{r}
+x <-c(1,2,NA)
+x[!is.na(x)]
+
+# complete cases of very handy function which is when, when you have multiple sets of vectors or data, or large data frames or you want to subset all out, all the missing values.
+x <- c(1,2,NA,4,NA,NA)
+y <-c("a",NA,NA,"d",NA,"f")
+good <- complete.cases(x,y)
+good
+x[good] # x element where the related observation do not contains any missing value.
+
+y[good]
+
+# dataframe
+
+airquality[1:6,]
+good <- complete.cases(airquality)
+airquality[good,][1:6,]
+
+# be caucious for the "".
+x <- c(1,2,NA,4,NA,NA)
+y <-c("a",NA,NA,"",NA,"f")
+good <- complete.cases(x,y)
+good
+x[good]
+```
+
+### Misc.
+
+#### get working dirctory
+
+```{r}
+# get working directory
+getwd()
+
+# change working directory
+setwd("~/Documents/GitHub/Coursera_Data_Science_Certificate")
+```
+
+#### R Console Input and Evaluation
+
+"\<-" symbol is the assignment operator. Assign a value to a symbol
+
+```{r}
+x <-1
+
+# two way to print the x
+print(x)
+x
+
+msg <- "hello"
+print(msg)
+```
+
+#### Numbers
+
+Numbers in R a generally treated as numeric objects (i.e. double
+precision real numbers)
+
+If you explicitly want an integer, you need to specify the L suffix
+
+Ex: Entering 1 gives you a numeric object; entering 1L explicitly gives
+you an integer.
+
+There is also a special number Inf which represents infinity; e.g. 1/0;
+Inf can be used in ordinary calculations; e.g. 1/Inf is 0
+
+```{r}
+1/Inf
+```
+
+The value NaN represents an undefined values (" not a number); e.g 0/0
+NaN can also be thought of as a missing value.
+
+```{r}
+0/0
+```
+
+#### Missing Values
+
+Missing values are denoted by NA or NaN for undefined athematical
+operations. \* is.na() is used to test objects if they are NA \*
+is.nan() is usest to test for NaN \* Na values have a class also, so
+there are integer NA, character NA, etc. \* A NAN value is also NA but
+the converse is not true. \* "" is not na
+
+```{r}
+x <-data.frame(foo=1:4,bar=c(T,T,F,F))
+x
+nrow(x)
+ncol(x)
+```
+
+```{r}
+x <- c(1,2,NA,10,3)
+is.na(x)
+is.nan(x)
+
+x<-c(1,2,NaN,NA,4)
+is.na(x)
+is.nan(x)
+
+x <-c("a","","b")
+is.na(x)
+x <-replace(x,x=="",NA)
+is.na(x)
+
+
+```
+
+#### booklist related to R
+
+[A list of books related to
+R](https://www.r-project.org/doc/bib/R-books.html)
+
+#### Name Attribute
+
+R objects can also have names, which is very useful for writing readable
+code and self-describing objects.
+
+```{r}
+x <- 1:3
+names(x)
+
+names(x) <- c("foo","bar","norf")
+
+names(x)
+
+```
+
+List can also have names.
+
+```{r}
+x <-list(a=1,b=2,c=3)
+x
+```
+
+matrices can have names
+
+```{r}
+m <- matrix(1:4, nrow =2 , ncol =2)
+dimnames(m) <- list(c("a","b"), c("c","d"))
+m
+```
+
+#### Reading Data
+
+-   read.table, read.csv, for reading tabular data (for writing:
+    write.table)
+    -   I would just add that the help page for read.table() says just
+        as much under details read.csv and read.csv2 are identical to
+        read.table except for the defaults. They are intended for
+        reading 'comma separated value' files ('.csv') or (read.csv2)
+        the variant used in countries that use a comma as decimal point
+        and a semicolon as field separator.. So to the OP - yes, you
+        would want read.table when your data don't match the default
+        values for read.csv
+    -   read.csv(file, header =T, stringsAsFactors = T) [by default,
+        strings are automotically convert to factor]
+-   readLines, for reading lines of a text file (for writing:
+    writeLines) +read.csv is identical is identical to read.table except
+    that the default separator is a comma.
+-   source, for reading in R code files (inverse of dump)
+-   dget, for reading in R code files (inverse of dput)
+-   load, for reading in saved workspaces (inverse of save)
+-   unserialize, for reading single R objects in binary form (inverse of
+    serialize)
+
+#### Read in larger datasets with read.table
+
+-   Use the colClasses argument. Specifiying htis option instaed ousing
+    the default can make read.table run MUCH faster, oten twice as fast.
+    In order to use this option, you have to know the class of each
+    column in your data frame. If all the columns are "numeric", for
+    example, then you can just set colClasses = "numeric". A quick and
+    dirty way to figure out the classes of each column is the following:
+
+```{r}
+# initial <- read.table("datatable.txt",nrows=100)
+# classes <- sapply(initial, class)
+# tabAll <- read.table("datatable.txt",colClasses =classes)
+```
+
+#### Textual Data Formats
+
+The dput() is used to create a minimal reproducible example, when you
+have question that you would like to ask on the website, you need to
+prepare a minimal reprocuible example, so others can use that to
+reprocduce your error.
+
+When you have quesitons, but your did not what to upload all the data,
+you can use this function to generate the minimal amount of data.
+
+#### Interfaces to the Outside World
+
+Data are read in using connection interfaces. Connections can be made to
+files (most common) or to other more exotic things.
+
+-   file, opens a connection to a file
+-   gzfile, opens a connection to a file compressed with gzip
+-   bzfile, opens a connection to a file compressed with bzip2
+-   url, opens a connection to a webpage
+
+#### Cectorized Operations
+
+Many operations in R are vectorized making code more efficient, concise,
+and easier to read.
+
+```{r}
+x <- 1:4
+y <- 6:9
+
+x+y
+x >3
+
+x*y
+
+# matrices
+
+x <-matrix(1:4,2,2);y <- matrix(rep(10,4),2,2)
+
+x*y
+x/y
+x %*% y ## true matrix multiplication
+
+```
+
+### Week 1 Quiz
+
+```{r}
+
+# install dplyr package
+# install.packages("dplyr")
+library(dplyr)
+
+# import the dataset
+data1 <-read.csv("./Data/hw1_data.csv")
+
+# get the class of each column
+lapply(data1,class)
+
+# check the column names of the dataset
+head(data1)
+
+# Extract the first 2 rows of the data frame and print them to the console.
+head(data1,n=2)
+
+# Extract the last 2 rows 
+tail(data1, n=2)
+
+# the value of Ozone in the 47 row
+data1[47,"Ozone"]
+
+# how many missing values
+sum(is.na(data1$Ozone))
+
+# mean
+mean(data1$Ozone,na.rm=T)
+
+# Extract the subset of rows of the data frame where Ozone values are above 31 and Temp values are above 90. What is the mean of Solar.R in this subset?
+
+data2 <- data1 %>%
+  filter(Ozone>31 & Temp>90 & !is.na(Ozone) & !is.na(Temp))
+
+mean(data2$Solar.R,na.rm=T)
+
+# What is the mean of "Temp" when "Month" is equal to 6? 
+
+data3 <-data1 %>%
+  filter(Month==6)
+
+mean(data3$Temp,na.rm=T)
+
+# What was the maximum ozone value in the month of May (i.e. Month is equal to 5)?
+
+data4 <-data1 %>%
+  filter(Month==5)
+
+max(data4$Ozone, na.rm=T)
+```
+
+## Week 2.2 Control Structures
+
+Control structures in R allow you to control the flow of execution of
+the program, depending on runtime conditions. Common structures are
+
+-   is, else: testing a condition
+-   for: execute a loop a fixed number of times
+-   while: execute a loop while a condition is true
+-   repeat: execute an infinite loop
+-   break: break the execution of a loop
+-   next: skip and interation of a loop
+-   return: exit a function
+
+### control structures - if - else
+
+```{r}
+age <- 20
+if (age > 18){
+  print ("Major")
+} else {
+  print ("Minor")
+}
+
+#ifelse short sytax
+age <- 20
+ifelse(age>=18, "Major", "Minor")
+
+# nested ifelse
+x <- 0
+
+if (x<0){
+  print ("negative")
+} else if (x>0){
+  print ("positive")
+} else {
+  print ("Zero")
+}
+
+#alternatively
+x<-0
+ifelse(x<0,"negative",ifelse(x==0,"Zero","positive"))
+
+```
+
+### Control Structures - For Loops
+
+```{r}
+x <- c("a","b","c","d")
+for(i in 1:4){
+  print(x[i])
+}
+```
+
+```{r}
+
+for (i in seq_along(x)) {
+  print(x[i])
+}
+
+```
+
+```{r}
+for (letter in x) {
+print(letter)
+}
+```
+
+Nested for loops
+
+```{r}
+x <- matrix(1:6, 2,3)
+
+for (i in seq_len(nrow(x))) {
+  for (j in seq_len(ncol(x))) {
+    print(x[i,j])
+  }
+}
+```
+
+Be careful with nesting though. Nesting beyond 2-3 levels is often very
+difficult to read/understand
+
+### Control Structures - While loops
+
+While loops begin by testing a condition. If it is true, then they
+execute the loop body. Once the loop body is execured, the condition is
+tested again, and so forth.
+
+```{r}
+count <-0
+
+while(count < 10){
+  print(count)
+  count <- count +1
+}
+```
+
+While if treated not properly, it may have infinite loop, use for loop
+instead of while loop.
+
+### Control Structures - Repeat, Next, Break
+
+Repeat intiate an infinite loop; these are not commonly used in
+statistical applications but they do have their uses. The only way to
+exit a repeat looop is to call break
+
+```{r}
+# x0 <-1
+# tol <- 1e-8
+
+# repeat{
+#   x1 <- computeEstimate()
+#   
+#   if(abs(x1-x0) < tol) {
+#     break
+#   } else{
+#     x0 <- x1
+#   }
+#   }
+
+```
+
+The loop in the previous slide is a bit dangerous because there's no
+guarantee it will stop. Better to set a hard limit on the number of
+iteration (e,g. using a for loop) and then report whether convergence
+was achieved or not.
+
+next is used to skip an iteration of a loop
+
+```{r}
+for (i in 1:100) {
+  if(i <=20){
+    ## skip the first 20 iterations
+    next
+  }
+  ## do something here
+}
+```
+
+"return" signals that a function should exit and return a given value
+
+### Control sturctures summary
+
+-   control sturcutes like if, while, and for allow you to control the
+    flow of an R program
+-   infinite loops hsould generally be avoided, even if they are
+    theoretically correct.
+-   control sturctures mentioned here are primarily useful for writing
+    programs; for commend-line interatice work, the \* apply functions
+    are more useful.
+
+### R funcitons.
+
+```{r}
+# add two number
+add2 <- function(x,y) {
+  x + y
+}
+
+add2(3,4)
+
+# take a vector number and return the number bigher than 10.
+
+above10 <- function(x){
+  use <- x > 10
+  x[use]
+}
+
+# take a vector number and return the number bigher than a number.
+above <-function(x,n){
+  use <- x>n # logical statement
+  x[use]
+}
+
+x <-1:20
+
+above(x,3)
+
+# set up a default number
+
+above <-function(x,n=10){
+  use <- x>n # logical statement
+  x[use]
+}
+
+x <-1:20
+
+above(x)
+above(x,5)
+
+# calculate the mean of each vector
+
+columnmean <- function(y, removeNA=TRUE){
+  nc <- ncol(y)
+  means <- numeric(nc) # a vecctor with zero entry.
+  for (i in 1:nc) {
+    means[i] <- mean(y[,i], na.rm=removeNA)
+  }
+  means
+}
+
+x <- matrix(1:18,2,9)
+columnmean(x)
+
+columnmean(airquality)
+columnmean(airquality,FALSE)
+
+```
+
+The ... argument indicate a variable number of arguments that are
+usually passed on to other functions.
+
+```{r}
+
+
+myplot <- function(x,y,type="1",...) {
+  plot(x,y,type=type,...)
+}
+```
+
+### Scoping rules
+
+```{r}
+search() # give searh path for R objects, give a list of attached packages and R objects, usually data.frames.
+```
+
+Lexical scoping
+
+```{r}
+f <- function(x,y){
+  x^2 + y/z
+}
+
+z <- 3
+f(4,2)
+
+# z is a free variable.
+```
+
+Environment is a collection of (symbo,value) pairs.
+
+make a function inside another function
+
+scoping rule, define a lm() function, why it does not recoganize it as a
+part of stat package, because r have a coping rule.it search is first
+found in the environment in which a function was defined, then search
+for it in the parent environment, then search for it until the golobal
+environment, thencontinue down the search list until we hit the empty
+environment
+
+```{r}
+make.power <- function(n) {
+  pow <- function(x){
+    x^n
+  }
+  pow
+}
+
+cube <- make.power(3)
+suqre <- make.power(2)
+cube(3)
+suqre(3)
+
+# what's in a function's environment?
+ls(environment(cube))
+```
+
+\`\`\`{r} y \<- 10
+
+f \<- function(x){ y \<-2 y\^2 + g(x) }
+
+      g <- function(x){
+        x*y
+      }
+
+
+
+f(3)
+
+ with lexical scoping the value of y in the function g is looked up in the environment in which the funciton was defined, in this case the global environment, so the value of y is 10.
+
+### coding standard of R programing
+* always use text files/ text editor
+*ident your code, 8 spaces is idea
+*limit the width of your code (80 columns?)
+* limit the length of indivuidual funcitons
+
+### Dates and Times
+R has developed a special representation of dates and times
+* Dates are represented by the Date class
+* Times are represented by the POSIXct or the POSIXLt clas
+* Date are stored internally as the number of days since 1970=01-01
+* TImes are stored internally as the number of seconds since 1970=01-01
+
+Dates in R
+Dates are represend by the date class and can be coerced from a character string using the as.Date()  funciton.
+
+```{r}
+x <-as.Date("1970-01-01")
+x
+
+y <- as.Date("1993-11-18")
+
+unclass(x)
+unclass(y) # how many days from 1970-01-01 untill 1993-11-18
+```
+
+Times are represented using the POSIcct or pOSiclt class
+* POSIXct is juest a very large integer under the hood; it uses a useful class when you want to store timesi n someting like a data frame.
+
+* posixlt is a list underneath and it stores a buch of other useful information like the day of the week, day of the year, month, day of the month.
+
+There are number of generic functions that work on dates and times;
+
+* weekdays: give the day of the week
+* months:give the month name
+* quarters: give the quarter number ("Q1", "Q2","Q3", or "Q4")
+
+Times can be coerced from a character string using the as.POSIXlt or as.POSIXct fucntion.
+
+```{r}
+x <- Sys.time()
+x
+
+p <- as.POSIXlt(x)
+p
+class(x)
+class(p)
+
+unclass(p)
+names(unclass(p))
+
+p$sec
+
+
+```
+
+Finally, there is the strptime funciton in case your dates are written in a different format
+
+```{r}
+datestring <- c("January 10, 2012 10:40", "December 9, 2011 9:10")
+x <-strptime(datestring, "%B %d,%Y %H:%M")
+x
+class(x)
+
+```
+You can use mathematical operations on dates and times. Well, really just + and -, you can do comparisons too (oe. ==, <=)
+
+```{r}
+# x <- as.Date("2012-01-01")
+# class(x)
+# y <- strptime("9 Jan 2011 11:34:21", "%d %b %Y %J:%M:%S")
+# z <- strptime("9 Jan 2011", "%d %b %Y")
+# class(y)
+# 
+# x-y
+# x-z
+# x <- as.POSIXlt(x)
+# x-y
+# x-z
+# 
+# 
+# n <- as.Date("9 Jan 2011", "%d %b %Y")
+# x <- as.Date("2012-01-01")
+# x-n
+```
+
+Even keeps track of leap years, leap seconds, daylight savings, and time zones.
+
+```{r}
+x <-as.Date("2012-03-01")
+y <-as.Date("2012-02-28")
+
+x-y
+
+x <-as.POSIXct("2012-10-25 01:00:00")
+y <- as.POSIXct("2012-10-25 06:00:00", tz="GMT") # change time zone
+y-x
+
+```
+summary
+* dates and times have special classes in R that allow for numerical and statistical calculations
+* dates use the date class
+* ITme use the POSIXct and POSIXlt class
+* character strings can be coerced to Date/Time classes using the strptyime function or the as.Date, as.POSIXlt, or as.POSIXct.
+
+### Programming Assignment 1: Quiz
+[A good reference](https://rstudio-pubs-static.s3.amazonaws.com/220397_d07534a9d3de4d0d87d7df9036602296.html#)
+
+```{r}
+
+# # Write a function named 'pollutantmean' that calculates the mean of a pollutant (sulfate or nitrate) across a specified list of monitors. The function 'pollutantmean' takes three arguments: 'directory', 'pollutant', and 'id'. Given a vector monitor ID numbers, 'pollutantmean' reads that monitors' particulate matter data from the directory specified in the 'directory' argument and returns the mean of the pollutant across all of the monitors, ignoring any missing values coded as NA. A prototype of the function is as follows
+# 
+# getwd()
+# 
+# pollutantmean <- function(directory,pollutant, id=1:332) {
+#   
+#   full <- NA
+#   
+#   for (x in id){
+#   path <- paste("./","data/",directory,"/",sprintf("%.3d",x),".csv",sep="")
+#   rcsv <- read.csv(path)
+#   full<-rbind(full,rcsv)
+#   }
+#   
+#   x<-mean(full[,pollutant],na.rm=T)
+#   x
+# }
+# 
+# # Test
+# pollutantmean("specdata","nitrate", 70:72)
+# pollutantmean("specdata","nitrate", 23)
+# 
+# # save the above as a function
+# 
+# 
+# # Write a function that reads a directory full of files and reports the number of completely observed cases in each data file. The function should return a data frame where the first column is the name of the file and the second column is the number of complete cases. A prototype of this function follows
+# 
+# 
+# # library(dplyr)
+# # complete <- function(directory, id=1:332){
+# #   
+# #    full <-NA
+# #    
+# #    for (x in id){
+# #                 path <- paste("./","data/",directory,"/",sprintf("%.3d",x),".csv",sep="")
+# #                 rcsv <- read.csv(path)
+# #                 full<-rbind(full,rcsv)
+# #    }
+# #    
+# #    results <-full %>% 
+# #                  mutate(a=case_when(((!is.na(sulfate))&(!is.na(nitrate)))~1,TRUE~0)) %>%
+# #                  group_by(ID) %>%
+# #                  mutate(nobs=sum(a)) %>%
+# #                  filter(row_number()==1 & !is.na(ID)) %>%
+# #                  ungroup() %>%
+# #                  select(ID,nobs) 
+# #    results<-as.data.frame(results)
+# #    results
+# # }
+# # 
+# # 
+# # 
+# # xx<-complete("specdata",30:25)
+# # x<-complete("specdata",3)
+# # 
+# # # Write a function that takes a directory of data files and a threshold for complete cases and calculates the correlation between sulfate and nitrate for monitor locations where the number of completely observed cases (on all variables) is greater than the threshold. The function should return a vector of correlations for the monitors that meet the threshold requirement. If no monitors meet the threshold requirement, then the function should return a numeric vector of length 0. A prototype of this function follows.
+# # 
+# # source("./2_R Programming/complete.R")
+# # corr <- function(directory, threshold=0){
+# #    
+# #    for (x in 1:332){
+# #                 path <- paste("./","data/",directory,"/",sprintf("%.3d",x),".csv",sep="")
+# #                 rcsv <- read.csv(path)
+# #                 full<-rbind(full,rcsv)
+# #    }
+# #    
+# #    nobs <- complete(directory)
+# #    
+# #    full_nobs <- left_join(full,nobs, by="ID")
+# #    
+# #    results <-    full_nobs %>%
+# #                  group_by(ID) %>%
+# #                  mutate(correlation=cor(sulfate,nitrate,use="na.or.complete")) %>%
+# #                  filter(row_number()==1) %>%
+# #                  ungroup() %>%
+# #                  select(ID,nobs,correlation) %>%
+# #                  filter(nobs>threshold)
+# # 
+# #    vec <-results$correlation
+# # }
+# # 
+# # 
+# # cr<-corr("specdata")
+# # 
+# # summary(cr)
+# # length(cr)
+# # 
+# # cr<-corr("specdata",5000)
+# # summary(cr)
+# 
+# ```
+# 
+# QUIZ
+# 
+# ```{r}
+# # # 1 might be faster
+# # pollutantmean <- function(directory, pollutant, id = 1:332) {
+# #     ## 'directory' is a character vector of length 1 indicating
+# #     ## the location of the CSV files
+# # 
+# #     ## 'pollutant' is a character vector of length 1 indicating
+# #     ## the name of  the pollutant for which we will calcultate the
+# #     ## mean; either "sulfate" or "nitrate"
+# # 
+# #     ## 'id' is an integer vector indicating the monitor ID numbers
+# #     ## to be used
+# # 
+# #     ## Return the mean of the pollutant across all monitors list
+# #     ## in the 'id' vector (ignoring NA values)
+# #     ## NOTE: Do not round the result
+# #     means <- c()
+# # 
+# #     for(monitor in id){
+# #         path <- paste(getwd(), "/", directory, "/", sprintf("%03d", monitor), ".csv", sep = "")
+# #         monitor_data <- read.csv(path)
+# #         interested_data <- monitor_data[pollutant]
+# #         means <- c(means, interested_data[!is.na(interested_data)])
+# #     }
+# # 
+# #     mean(means)
+# # }
+# # 
+# # # 3 might be faster
+# # corr <- function(directory, threshold = 0){
+# #     ## 'directory' is a character vector of length 1 indicating
+# #     ## the location of the CSV files
+# # 
+# #     ## 'threshold' is a numeric vector of length 1 indicating the
+# #     ## number of completely observed observations (on all
+# #     ## variables) requi?red to compute the correlation between
+# #     ## nitrate and sulfate; the default is 0
+# # 
+# #     ## Return a numeric vector of correlations
+# #     ## NOTE: Do not round the result!
+# #     cor_results <- numeric(0)
+# # 
+# #     complete_cases <- complete(directory)
+# #     complete_cases <- complete_cases[complete_cases$nobs>=threshold, ]
+# #     #print(complete_cases["id"])
+# #     #print(unlist(complete_cases["id"]))
+# #     #print(complete_cases$id)
+# # 
+# #     if(nrow(complete_cases)>0){
+# #         for(monitor in complete_cases$id){
+# #             path <- paste(getwd(), "/", directory, "/", sprintf("%03d", monitor), ".csv", sep = "")
+# #             #print(path)
+# #             monitor_data <- read.csv(path)
+# #             #print(monitor_data)
+# #             interested_data <- monitor_data[(!is.na(monitor_data$sulfate)), ]
+# #             interested_data <- interested_data[(!is.na(interested_data$nitrate)), ]
+# #             sulfate_data <- interested_data["sulfate"]
+# #             nitrate_data <- interested_data["nitrate"]
+# #             cor_results <- c(cor_results, cor(sulfate_data, nitrate_data))
+# #         }
+# #     }
+# #     cor_results
+# # }
+# 
+# 
+# source("./2_R Programming/pollutantmean.R")
+# source("./2_R Programming/complete.R")
+# source("./2_R Programming/corr.R")
+# 
+# pollutantmean("specdata", "sulfate", 1:10)
+# pollutantmean("specdata", "nitrate", 70:72)
+# pollutantmean("specdata", "sulfate", 34)
+# pollutantmean("specdata", "nitrate")
+# 
+# cc <- complete("specdata", c(6, 10, 20, 34, 100, 200, 310))
+# print(cc$nobs)
+# 
+# cc <- complete("specdata", 54)
+# print(cc$nobs)
+# 
+# #2  FASTER musch better
+# complete <- function(directory, id = 1:332){
+#     ## 'director' is a character vector of length 1 indicating
+#     ## the location of the CSV files
+#     
+#     ## 'id' is an integer vector indicating the monitor ID numbers
+#     ## to be used
+#     
+#     ## Return a data frame of the from:
+#     ## id nobs
+#     ## 1  117
+#     ## 2  1041
+#     ## ...
+#     ## where 'id' is the monitor ID number and 'nobs' is the
+#     ## number of complete cases
+#     results <- data.frame(id=numeric(0), nobs=numeric(0))
+#     for(monitor in id){
+#         path <- paste("./","data/",directory,"/",sprintf("%.3d",monitor),".csv",sep="")
+#         monitor_data <- read.csv(path)
+#         interested_data <- monitor_data[(!is.na(monitor_data$sulfate)), ]
+#         interested_data <- interested_data[(!is.na(interested_data$nitrate)), ]
+#         nobs <- nrow(interested_data)
+#         results <- rbind(results, data.frame(id=monitor, nobs=nobs))
+#     }
+#     results
+# }
+# 
+# RNGversion("3.5.1")  
+# set.seed(42)
+# cc <- complete("specdata", 332:1)
+# use <- sample(332, 10)
+# print(cc[use, "nobs"])
+# 
+# cr <- corr("specdata")                
+# cr <- sort(cr)   
+# RNGversion("3.5.1")
+# set.seed(868)                
+# out <- round(cr[sample(length(cr), 5)], 4)
+# print(out)
+# 
+# cr <- corr("specdata", 129)                
+# cr <- sort(cr)                
+# n <- length(cr)    
+# RNGversion("3.5.1")
+# set.seed(197)                
+# out <- c(n, round(cr[sample(n, 5)], 4))
+# print(out)
+# 
+# cr <- corr("specdata", 2000)                
+# n <- length(cr)                
+# cr <- corr("specdata", 1000)                
+# cr <- sort(cr)
+# print(c(n, round(cr, 4)))
+# 
+
+```
+## Week 2.3 Loop Functions and Debugging
+
+### Loop function-lapply
+
+* lapply: loop over a list and evaluate a function on each element
+* sapply: same as lapply but try to simplify the result
+* apply: apply a function over the margins of an array
+* tapply: apply a function over subsets of a vector
+* mapply: multivariate version of lapply
+
+```{r}
+# lapply always returns a list , regardless of the class of the input
+
+x <-list(a=1:5,b=rnorm(10))
+
+lapply(x,mean)
+
+# anaymous function for extracting the first column of each matrix
+x <-list(a=matrix(1:4, 2,2), b=matrix(1:6,3,2))
+x
+
+lapply(x,function(elt) elt[,1])
+
+
+
+```
+
+sapply will try to simplify the result of lapply if possible.
+* if the result is a list where every element is length 1, then a vector is returned
+* if the result is a list where every eleemnent is a vector of the same length(>1), a matrix is returned.
+* if it can't figure things out, a list is returend.
+
+### Loop Functions-apply
+apply is used to evaluate a function (often an anonymous one) over the margins of an array.
+* if is most often used to apply a fucntion to the rows or columns of a matrix
+* if can be sued with general arrays,e.g. taking the average of an array of matrices
+* if is not really faster than writing a loop, but it works in one line!
+
+array is a vector has dimension attached to it. a matrix is a two dimensional array.
+
+```{r}
+x <-matrix(rnorm(200),20,10)
+
+# 2 means pass the function to each column
+apply(x,2,mean)
+# 1 means pass the function to each row
+apply(x,1,sum)
+
+
+# For sums and means of matrix dimensions, we have some shortcuts.
+ # rowSums=apply(x,1,sum)
+ # rowMeans=apply(x,1,mean)
+ # colSums=apply(x,2,sum)
+ # colMeans=apply(x,2,mean)
+
+x <-matrix(rnorm(200),20,10)
+apply(x,1,quantile,probs=c(0.25,0.75)) # for each row, two line report
+
+a <- array(rnorm(2*2*10),c(2,2,10))
+a
+
+apply(a,c(1,2),mean) # collapse the third dimension.
+
+rowMeans(a, dims=2)
+```
+
+### Loop Functions-mapply
+
+mapply is a multivariate apply of sorts which applies a function in parallel over a set of arguments.
+
+```{r}
+# The following is tedious to type
+
+list(rep(1,4),rep(2,3),rep(3,2),rep(4,1))
+
+# instead we can do
+
+mapply(rep, 1:4,4:1)
+```
+vectorizing a function
+
+```{r}
+noise <- function(n,mean,sd) {
+  rnorm(n,mean,sd)
+}
+
+mapply(noise,1:5,1:5,2)
+```
+### Loop Functions-tapply
+
+tapply is used to apply a function over subsets of a vector. 
+
+```{r}
+# take group means
+str(tapply)
+# x is a vector
+# index is a factor or a list of factors
+# fun is a function to be applied
+# simplify, should we simplify the results?
+
+x <- c(rnorm(10),runif(10),rnorm(10,1))
+x
+f <- gl(3,10) # generate factor level
+f
+
+tapply(x,f,mean)
+
+tapply(x,f,mean, simplify=F)
+tapply(x,f,range)
+
+```
+
+### Loop Funcitons- split
+split takes a vector or other objects and splits it into groups determined by a factor or list of factors
+
+```{r}
+
+str(split)
+
+# x is a vector (or) list or data frame
+# f is a factor (or coerced to one) or a list of factors
+# drop indicates whether empty factors levels should be dropped
+
+x <- c(rnorm(10), runif(10), rnorm(10,1))
+
+f <- gl(3,10)
+
+split(x,f) # split always return a list back so you can use lapply or sapply
+
+# a common idiom is split followed by an lapply
+
+# The following two are the same.
+lapply(split(x,f),mean)
+tapply(x,f,mean,simplify=F)
+
+library(datasets)
+head(airquality)
+
+
+# calucualte the mean by group
+
+# 1 first split the data frame into monthly pieces
+s <- split(airquality, airquality$Month)
+lapply(s, function(x) colMeans(x[,c("Ozone", "Solar.R", "Wind")]))
+sapply(s, function(x) colMeans(x[,c("Ozone", "Solar.R", "Wind")]))
+sapply(s, function(x) colMeans(x[,c("Ozone", "Solar.R", "Wind")],na.rm=T))
+
+
+# Splitting on more than one level
+
+x <- rnorm(10)
+f1 <- gl(2,5)
+f2 <- gl(5,2)
+f1
+f2
+x
+
+y <-data.frame(x,f1,f2)
+y
+interaction(f1,f2) # interaction computes a factor which represents the interaction of the given factors
+
+# interactions can create empty levels
+
+str(split(x,list(f1,f2))) # it will do the interaction function automatically.
+
+# Empty levels can be dropped.
+
+str(split(x,list(f1,f2),drop=TRUE))
+
+```
+
+### Debugging Tools- Diagnosing the Problem
+
+Debugging tool built in R
+
+indications that something's not right
+* message: A generic notification/diagnostic message produced by the message function; execution of the function continues
+* warning an indicaiton that something is wrong but not necessarily fatal; execution of the function continues; generated by the warning funciton
+* error: an indication that a fatal problem has occurred;  execution stops; produced by the stop funciton
+* condition: a generic concept for indicating that something uenexpected can occur; programmers can create their own conditions
+
+```{r}
+# log(-1) an error will return
+
+printmessage <- function(x) {
+  if(x>0)
+    print("x is greater than zero") 
+  else
+    print("x is less than or equal to zero")
+  invisible(x) # the object returned does not get printed in console.
+}
+
+printmessage(1)
+# printmessage(NA) an error will return because you can not make a comparision whethaet NA is greater than zero.
+
+# how to fix it
+
+printmessage2 <- function(x) {
+  if(is.na(x))
+    print("x is a missing value!")
+  else if(x>0)
+    print("x is greater than zero")
+  else
+    print("x is less than or equal to zero")
+  invisible(x)
+}
+
+printmessage2(NA)
+
+```
+
+How do you know that something is wrong with your function?
+
+* What was your input? How did you call the function?
+* What were you expecting? Output, messages, other results?
+* What did you get?
+* How does what you get differ from what you were expecting?
+* Were you expectations correct in the first place?
+* Can you reproduce the problem(exactly)
+
+### Debugging Tools - Basic Tools
+
+The primary tools for debugging funcitons in R are
+* traceback: prints out the function call stack after an error occurs; does nothing if there's no erro
+* debug: flags a function for "debug" mode which allows you to step through execution of a function one line at a time.
+* browser: suspends the execution of a funtion whever it is called and puts the function in debug mode
+* trace: allows you to insert debugging code into a function a specific places
+* recover: allows you to modifi=y the error behavior so that you can browse the funciton call stack.
+
+These are interactive tools specifically designed to allow you to pick through a funciton. There's also the more blunt technique of inserting print/cat statements in the function.
+
+### Debugging Tools - Using the Tools
+
+```{r}
+# mean(xx) give a warning
+# mean(xxx)
+# traceback() # traceback give you the most recent error.
+
+
+
+```
+
+### Quiz
+
+```{r}
+library(datasets)
+data(iris)
+?iris
+
+head(iris)
+# In this dataset, what is the mean of 'Sepal.Length' for the species virginica? 
+tapply(iris$Sepal.Length,iris$Species,mean)
+
+# Continuing with the 'iris' dataset from the previous Question, what R code returns a vector of the means of the variables 'Sepal.Length', 'Sepal.Width', 'Petal.Length', and 'Petal.Width'?
+
+colMeans(iris[,1:4])
+apply(iris[,1:4],2,mean)
+
+library(datasets)
+data(mtcars)
+
+?mtcars
+
+head(mtcars)
+# How can one calculate the average miles per gallon (mpg) by number of cylinders in the car (cyl)? Select all that apply.
+
+
+sapply(split(mtcars$mpg, mtcars$cyl), mean)
+
+with(mtcars, tapply(mpg, cyl, mean))
+
+tapply(mtcars$mpg, mtcars$cyl, mean)
+# what is the absolute difference between the average horsepower of 4-cylinder cars and the average horsepower of 8-cylinder cars?
+x<-tapply(mtcars$hp, mtcars$cyl, mean)
+x
+x[1]-x[3]
+
+debug(ls)
+ls()
+```
+
+### Programming Assignment
+
+Example: Caching the Mean of a Vector
+
+The first function, makeVector creates a special "vector", which is really a list containing a function to
+
+1. set the value of the vector
+
+2. get the value of the vector
+
+3. set the value of the mean
+
+4. get the value of the mean
+
+```{r}
+
+makeVector <- function(x = numeric()) {
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        get <- function() x # since the symbol x is not defined within get(), R retrieves it from the parent environment
+        setmean <- function(mean) m <<- mean # the code uses the <<- form of the assignment operator to assign the input argument to the value of m in the parent environment.
+        getmean <- function() m
+        list(set = set, get = get,
+             setmean = setmean,
+             getmean = getmean)
+}
+
+makeVector(1:2)
+
+
+cachemean <- function(x, ...) {
+        m <- x$getmean()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- mean(data, ...)
+        x$setmean(m)
+        m
+}
+
+aVector <-makeVector(1:10)
+aVector$get()
+aVector$getmean()
+
+aVector$set(30:50)
+cachemean(aVector)
+
+aVector$getmean()
+
+
+
+```
+
+## Simulation & Profiling
+
+### str: compactly display the internal structure of an R object
+
+* A diagnostic function and an alternative to 'summary'
+* It is especially well suited to compactly display the (abbreviated) contents of (possibly nested) lists.
+* Roughly one line per basic object
+```{r}
+str(str)
+str(lm)
+
+x<-rnorm(100,2,4)
+str(x)
+summary(x)
+
+f <- gl(40, 10)
+str(f)
+
+library(datasets)
+head(airquality)
+str(airquality)
+
+m <- matrix(rnorm(100), 10, 10)
+str(m) # give you the observation in first column
+
+s<-split(airquality, airquality$Month)
+str(s)
+```
+### Simulation - generating random numbers
+
+Functions for probability distributions in R
+* rnorm: generate random Normal variates with a given mean and standard deviation.
+* dnorm: evaluate the Normal probability density (with a given mean/SD) at a point (or vector of points).
+* pnorm : evaluate the cumulative distribution funciton for a Normal distribution.
+* rpois : generate random Poisson vaariates with a given rate.
+
+Probability distribution functions usually have four functions associated with them. The functions are preficed with a 
+* d for density
+* r for random number generation
+* p for cumulative distribution
+* q for quantile function
+
+working with the normal distributions requires using these four functions
+
+```{r}
+# dnorm(x, mean=0, sd=1, log=F)
+# pnorm(q, mean=0, sd=1, lower.tail =T, log.p=F)
+# qnorm(q, mean=0, sd=1, lower.tail =T, log.p=F)
+# rnorm(n, mean=0,sd=1)
+
+x <-rnorm(10)
+x
+x <- rnorm(10,20,2)
+
+set.seed(1)
+rnorm(5)
+set.seed(1)
+rnorm(5)
+
+# generat Poisson data
+
+rpois(10,1)
+rpois(10,2)
+
+ppois(4,2) # cummulative distribution Pr(x <=4)
+
+
+```
+
+
+### Simulation - simulating a linear model
+
+
+```{r}
+set.seed(20)
+x <- rnorm(100)
+e <- rnorm(100, 0, 2)
+
+y <- 0.5+ 2*x + e
+
+summary(y)
+
+plot(x,y)
+
+```
+what if x is binary
+
+```{r}
+set.seed(10)
+x <- rbinom(100, 1, 0.5)
+y <- 0.5+ 2*x + e
+
+summary(y)
+
+plot(x,y)
+```
+Suppose we want to simulate from a Poisson model
+
+```{r}
+set.seed(1)
+x <- rnorm(100)
+log.mu <- 0.5+0.3*x
+y <- rpois(100, exp(log.mu))
+
+summary(y)
+plot(x,y)
+```
+### Simulation - Random Sampling
+
+```{r}
+
+# The sample function draws randomly from a specified set of (scalar) objects allowing you to sample from arbitrary distributions.
+
+set.seed(1)
+
+sample(1:10,4)
+
+sample(letters,5)
+
+sample(1:10) # permutation
+
+sample(1:10,replace=T) # sample with replacement
+
+```
+
+### R profiler
+
+Why is my code so slow?
+* profiling is a systematic way to examine how much time is spend in different parts of a program
+* Useful when trying to optimize your code
+* Often code runs fine once, but what if you have to put it in a loop for 1000 iterations? Is it still fast enough?
+* Profiling is better than guessing.
+
+On optimizing your code
+* Getting biggest impact on speeding up code depends on knowing where the code spends most of its time
+* This cannot be done withou performance analysis or profiling
+
+Using system.time()
+* user time: time charged to the cpu for this expression
+* elapsed itme:" wall clock" time
+
+```{r}
+system.time(readLines("http://www.jhsph.edu"))
+
+
+```
+The Rprof() function strarts the profiler in R
+* R must be compiled with profiler support ( but this is usually the case)
+The summaryRprof() function summarizes the output from Rprof() (otherwise its not readable)
+* Do not use system.teim() and Rprof() togehter or you will be sad.
+```{r}
+
+
+
+```
+
