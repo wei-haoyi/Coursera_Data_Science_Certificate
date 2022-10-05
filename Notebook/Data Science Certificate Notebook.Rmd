@@ -857,10 +857,10 @@ x %*% y ## true matrix multiplication
 
 # install dplyr package
 # install.packages("dplyr")
-library(dplyr)
+ library(dplyr)
 
 # import the dataset
-data1 <-read.csv("./Data/hw1_data.csv")
+data1 <-read.csv("../Data/hw1_data.csv")
 
 # get the class of each column
 lapply(data1,class)
@@ -2015,9 +2015,30 @@ The Rprof() function strarts the profiler in R
 * R must be compiled with profiler support ( but this is usually the case)
 The summaryRprof() function summarizes the output from Rprof() (otherwise its not readable)
 * Do not use system.teim() and Rprof() togehter or you will be sad.
-```{r}
 
 
 
-```
+
+
+
+
+
+
+
+
+
+# Course 8 Practical Machine Learning
+
+## week 8.1 Prediciton
+
+### Who predicts
+
+* Local governments - > pension payments
+* Google -> Whether you will click on an ad
+* Amazon -> what movies you will watch
+* Insurance companies -> what your risk of death is
+* Johns Hopkins -> who will succeed in their programs
+
+
+
 

@@ -2190,7 +2190,7 @@ good</code></pre>
 <h4>get working dirctory</h4>
 <pre class="r"><code># get working directory
 getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/wei/Documents/GitHub/Coursera_Data_Science_Certificate&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/wei/Documents/GitHub/Coursera_Data_Science_Certificate/Notebook&quot;</code></pre>
 <pre class="r"><code># change working directory
 setwd(&quot;~/Documents/GitHub/Coursera_Data_Science_Certificate&quot;)</code></pre>
 </div>
@@ -2392,7 +2392,7 @@ x*y</code></pre>
 <h3>Week 1 Quiz</h3>
 <pre class="r"><code># install dplyr package
 # install.packages(&quot;dplyr&quot;)
-library(dplyr)</code></pre>
+ library(dplyr)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -2402,7 +2402,7 @@ library(dplyr)</code></pre>
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code># import the dataset
-data1 &lt;-read.csv(&quot;./Data/hw1_data.csv&quot;)
+data1 &lt;-read.csv(&quot;../Data/hw1_data.csv&quot;)
 
 # get the class of each column
 lapply(data1,class)</code></pre>
@@ -2783,26 +2783,26 @@ times;</p>
 as.POSIXct fucntion.</p>
 <pre class="r"><code>x &lt;- Sys.time()
 x</code></pre>
-<pre><code>## [1] &quot;2022-10-03 11:31:28 EDT&quot;</code></pre>
+<pre><code>## [1] &quot;2022-10-04 00:42:28 EDT&quot;</code></pre>
 <pre class="r"><code>p &lt;- as.POSIXlt(x)
 p</code></pre>
-<pre><code>## [1] &quot;2022-10-03 11:31:28 EDT&quot;</code></pre>
+<pre><code>## [1] &quot;2022-10-04 00:42:28 EDT&quot;</code></pre>
 <pre class="r"><code>class(x)</code></pre>
 <pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
 <pre class="r"><code>class(p)</code></pre>
 <pre><code>## [1] &quot;POSIXlt&quot; &quot;POSIXt&quot;</code></pre>
 <pre class="r"><code>unclass(p)</code></pre>
 <pre><code>## $sec
-## [1] 28.82842
+## [1] 28.99881
 ## 
 ## $min
-## [1] 31
+## [1] 42
 ## 
 ## $hour
-## [1] 11
+## [1] 0
 ## 
 ## $mday
-## [1] 3
+## [1] 4
 ## 
 ## $mon
 ## [1] 9
@@ -2811,10 +2811,10 @@ p</code></pre>
 ## [1] 122
 ## 
 ## $wday
-## [1] 1
+## [1] 2
 ## 
 ## $yday
-## [1] 275
+## [1] 276
 ## 
 ## $isdst
 ## [1] 1
@@ -2831,7 +2831,7 @@ p</code></pre>
 <pre><code>##  [1] &quot;sec&quot;    &quot;min&quot;    &quot;hour&quot;   &quot;mday&quot;   &quot;mon&quot;    &quot;year&quot;   &quot;wday&quot;   &quot;yday&quot;  
 ##  [9] &quot;isdst&quot;  &quot;zone&quot;   &quot;gmtoff&quot;</code></pre>
 <pre class="r"><code>p$sec</code></pre>
-<pre><code>## [1] 28.82842</code></pre>
+<pre><code>## [1] 28.99881</code></pre>
 <p>Finally, there is the strptime funciton in case your dates are
 written in a different format</p>
 <pre class="r"><code>datestring &lt;- c(&quot;January 10, 2012 10:40&quot;, &quot;December 9, 2011 9:10&quot;)
@@ -3130,7 +3130,7 @@ lapply(x,mean)</code></pre>
 ## [1] 3
 ## 
 ## $b
-## [1] 0.2765707</code></pre>
+## [1] 0.04547519</code></pre>
 <pre class="r"><code># anaymous function for extracting the first column of each matrix
 x &lt;-list(a=matrix(1:4, 2,2), b=matrix(1:6,3,2))
 x</code></pre>
@@ -3169,14 +3169,14 @@ dimensional array.</p>
 
 # 2 means pass the function to each column
 apply(x,2,mean)</code></pre>
-<pre><code>##  [1] -0.23437157 -0.26555990 -0.04230386  0.19985971  0.13008784  0.39458725
-##  [7] -0.19835854  0.06155291  0.06610854 -0.02134466</code></pre>
+<pre><code>##  [1] -0.58999859  0.11584441  0.05122143 -0.21044283  0.25024934 -0.11327389
+##  [7]  0.18073262 -0.01729624  0.22584326 -0.18043313</code></pre>
 <pre class="r"><code># 1 means pass the function to each row
 apply(x,1,sum)</code></pre>
-<pre><code>##  [1] -3.46555769  0.98600447 -0.13948664 -5.88672426 -1.37168244 -1.72140162
-##  [7]  2.82727632 -0.06883981  4.04754502 -4.24482666 -0.22507133 -0.25166369
-## [13] -2.12172319 -0.95897260  6.78968451 -1.40949334  8.14020252 -5.67541634
-## [19]  3.73789877  2.81740249</code></pre>
+<pre><code>##  [1] -4.17704700 -2.52411616 -5.28365633  1.24988749  1.75707328  4.54514270
+##  [7] -1.45836909  2.25739346  3.18448079 -2.37995481 -0.04368878 -5.10124199
+## [13]  3.93929360 -4.39972028  3.15763049  2.85897558 -0.82671035 -1.32306708
+## [19] -4.32458124  3.14120339</code></pre>
 <pre class="r"><code># For sums and means of matrix dimensions, we have some shortcuts.
  # rowSums=apply(x,1,sum)
  # rowMeans=apply(x,1,mean)
@@ -3185,87 +3185,87 @@ apply(x,1,sum)</code></pre>
 
 x &lt;-matrix(rnorm(200),20,10)
 apply(x,1,quantile,probs=c(0.25,0.75)) # for each row, two line report</code></pre>
-<pre><code>##           [,1]        [,2]       [,3]       [,4]       [,5]       [,6]
-## 25% -0.3520525 -0.95035610 -0.9001396 -0.8341706 -0.1293801 -1.1255175
-## 75%  0.3748507 -0.03680233  0.6704852  0.1223141  0.4223180  0.5436287
-##           [,7]       [,8]       [,9]      [,10]      [,11]      [,12]
-## 25% -1.0662463 -1.0697590 -0.2680775 -0.6114068 -0.8072837 -0.1414841
-## 75%  0.1276412  0.9387319  1.2124221  0.8179317  0.3056503  0.5710712
-##          [,13]      [,14]      [,15]      [,16]      [,17]      [,18]
-## 25% -0.5542332 -0.6922086 -0.1405029 -0.9752077 -0.5742132 -0.7732709
-## 75%  0.2566986  1.3869598  0.7195611  1.3497956  0.8416979  1.2893448
+<pre><code>##           [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## 25% -0.7734588 -0.1470292 -0.8810808 -0.9263255 -0.4110669 -0.7944083
+## 75%  0.7904910  0.7157621  0.6569110  0.7532856  0.5257218  0.2263552
+##            [,7]       [,8]       [,9]      [,10]      [,11]      [,12]
+## 25% -0.89628658 -0.7051652 -0.3412098 -0.7654770 -0.8903461 -0.3651376
+## 75% -0.06611356  0.4170541  0.8580071 -0.2497512  0.5444967  0.1263823
+##          [,13]      [,14]     [,15]      [,16]      [,17]         [,18]
+## 25% -1.2191441 -1.0514241 -1.125730 -0.5834429 -0.2754807 -0.0005996393
+## 75%  0.2243487  0.2068644  0.436636  0.6552161  0.8228406  0.6743410169
 ##          [,19]      [,20]
-## 25% -0.3341645 -0.9930771
-## 75%  0.7755367  0.3186295</code></pre>
+## 25% -1.1622173 -0.6982629
+## 75%  0.1586291  0.4537278</code></pre>
 <pre class="r"><code>a &lt;- array(rnorm(2*2*10),c(2,2,10))
 a</code></pre>
 <pre><code>## , , 1
 ## 
-##            [,1]      [,2]
-## [1,]  1.6962029 0.2847360
-## [2,] -0.3168487 0.1382269
+##            [,1]       [,2]
+## [1,] -0.3748387  0.3931933
+## [2,]  0.2585070 -1.8724257
 ## 
 ## , , 2
 ## 
-##            [,1]     [,2]
-## [1,] -1.0389778 1.636216
-## [2,] -0.7462627 1.318624
+##            [,1]      [,2]
+## [1,] 1.87453809 0.2521188
+## [2,] 0.07869446 1.8475897
 ## 
 ## , , 3
 ## 
-##           [,1]       [,2]
-## [1,] -1.845008 -0.0361500
-## [2,] -1.043801 -0.6290966
+##            [,1]      [,2]
+## [1,] -0.8762848 0.2960945
+## [2,] -0.1660184 0.5931929
 ## 
 ## , , 4
 ## 
-##            [,1]      [,2]
-## [1,]  0.6904633 0.1020898
-## [2,] -1.2713996 0.5223083
+##            [,1]    [,2]
+## [1,]  1.5589776 1.13369
+## [2,] -0.8258759 1.28463
 ## 
 ## , , 5
 ## 
-##            [,1]        [,2]
-## [1,] -0.9169188 -2.04484165
-## [2,]  1.2164799 -0.03507619
+##            [,1]       [,2]
+## [1,] -3.2412349 -2.2870973
+## [2,]  0.9470517 -0.6678344
 ## 
 ## , , 6
 ## 
-##             [,1]     [,2]
-## [1,] 1.022683475 0.677854
-## [2,] 0.007470679 1.215473
+##            [,1]       [,2]
+## [1,] -0.6434596 -0.1180412
+## [2,] -0.5293303 -0.4520804
 ## 
 ## , , 7
 ## 
-##            [,1]       [,2]
-## [1,]  0.3643120 -1.2347881
-## [2,] -0.5227991 -0.1477473
+##           [,1]       [,2]
+## [1,] 0.3514802 -0.9394915
+## [2,] 0.6968394  0.5353273
 ## 
 ## , , 8
 ## 
-##            [,1]        [,2]
-## [1,] -0.1149898 1.350166466
-## [2,]  1.6307928 0.009034862
+##           [,1]        [,2]
+## [1,] 0.8944864 -0.16313578
+## [2,] 0.8632456  0.03479018
 ## 
 ## , , 9
 ## 
-##            [,1]       [,2]
-## [1,] -0.1970119 -0.7923547
-## [2,]  1.4394782  0.4061007
+##           [,1]      [,2]
+## [1,] -1.550076 0.6351362
+## [2,] -1.793839 0.1178630
 ## 
 ## , , 10
 ## 
 ##           [,1]      [,2]
-## [1,] -1.058459 1.7523450
-## [2,]  1.688978 0.2957124</code></pre>
+## [1,] 1.1306635 0.9691278
+## [2,] 0.8886463 0.1316889</code></pre>
 <pre class="r"><code>apply(a,c(1,2),mean) # collapse the third dimension.</code></pre>
-<pre><code>##            [,1]      [,2]
-## [1,] -0.1397704 0.1695272
-## [2,]  0.2082089 0.3093560</code></pre>
+<pre><code>##             [,1]      [,2]
+## [1,] -0.08757479 0.0171595
+## [2,]  0.04179205 0.1552741</code></pre>
 <pre class="r"><code>rowMeans(a, dims=2)</code></pre>
-<pre><code>##            [,1]      [,2]
-## [1,] -0.1397704 0.1695272
-## [2,]  0.2082089 0.3093560</code></pre>
+<pre><code>##             [,1]      [,2]
+## [1,] -0.08757479 0.0171595
+## [2,]  0.04179205 0.1552741</code></pre>
 </div>
 <div id="loop-functions-mapply" class="section level3">
 <h3>Loop Functions-mapply</h3>
@@ -3306,19 +3306,19 @@ mapply(rep, 1:4,4:1)</code></pre>
 
 mapply(noise,1:5,1:5,2)</code></pre>
 <pre><code>## [[1]]
-## [1] 1.338354
+## [1] -0.2403204
 ## 
 ## [[2]]
-## [1]  3.616659 -2.183021
+## [1] 0.5408727 0.8602436
 ## 
 ## [[3]]
-## [1] 2.643851 1.111094 3.269000
+## [1] 3.768044 6.237024 3.280859
 ## 
 ## [[4]]
-## [1] 6.606619 4.263957 3.310802 5.413146
+## [1] 7.391823 3.335120 3.783665 5.640673
 ## 
 ## [[5]]
-## [1] 7.875627 3.726654 2.576526 5.182220 4.876833</code></pre>
+## [1] 7.909077 9.097330 3.000186 2.424485 6.381804</code></pre>
 </div>
 <div id="loop-functions-tapply" class="section level3">
 <h3>Loop Functions-tapply</h3>
@@ -3333,36 +3333,37 @@ str(tapply)</code></pre>
 
 x &lt;- c(rnorm(10),runif(10),rnorm(10,1))
 x</code></pre>
-<pre><code>##  [1] -0.51014846 -1.12233704  0.01637588 -1.17510349  0.43241740 -0.21676470
-##  [7] -0.54111830 -1.17654296  1.16007539  1.91407746  0.73193329  0.51050864
-## [13]  0.56494714  0.63842940  0.01797175  0.45761757  0.54706010  0.98635617
-## [19]  0.21956139  0.56303681  0.34733817  2.02278377  1.03879607  1.30621322
-## [25]  0.69840142  0.84952433  1.06629288  2.83187229  0.35682963  1.13979920</code></pre>
+<pre><code>##  [1]  0.375909290  0.448017071  0.271680991 -0.117675534 -1.471215551
+##  [6]  0.976765186 -0.441006595  0.437337380  0.483556528  0.758257273
+## [11]  0.143220613  0.273212936  0.721490346  0.754988066  0.714270346
+## [16]  0.804385771  0.330040615  0.927111241  0.334658361  0.684157036
+## [21]  0.466745007  1.712545804  2.524940727 -0.008839562  1.111303316
+## [26]  0.751281781  0.617610288  0.543764065  1.788145298  1.554877306</code></pre>
 <pre class="r"><code>f &lt;- gl(3,10) # generate factor level
 f</code></pre>
 <pre><code>##  [1] 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3
 ## Levels: 1 2 3</code></pre>
 <pre class="r"><code>tapply(x,f,mean)</code></pre>
-<pre><code>##          1          2          3 
-## -0.1219069  0.5237422  1.1657851</code></pre>
+<pre><code>##         1         2         3 
+## 0.1721626 0.5687535 1.1062374</code></pre>
 <pre class="r"><code>tapply(x,f,mean, simplify=F)</code></pre>
 <pre><code>## $`1`
-## [1] -0.1219069
+## [1] 0.1721626
 ## 
 ## $`2`
-## [1] 0.5237422
+## [1] 0.5687535
 ## 
 ## $`3`
-## [1] 1.165785</code></pre>
+## [1] 1.106237</code></pre>
 <pre class="r"><code>tapply(x,f,range)</code></pre>
 <pre><code>## $`1`
-## [1] -1.176543  1.914077
+## [1] -1.4712156  0.9767652
 ## 
 ## $`2`
-## [1] 0.01797175 0.98635617
+## [1] 0.1432206 0.9271112
 ## 
 ## $`3`
-## [1] 0.3473382 2.8318723</code></pre>
+## [1] -0.008839562  2.524940727</code></pre>
 </div>
 <div id="loop-funcitons--split" class="section level3">
 <h3>Loop Funcitons- split</h3>
@@ -3380,37 +3381,37 @@ f &lt;- gl(3,10)
 
 split(x,f) # split always return a list back so you can use lapply or sapply</code></pre>
 <pre><code>## $`1`
-##  [1]  1.2302226 -0.5984976  1.1997408 -1.3114722  0.4677533  1.0408459
-##  [7] -0.5423823 -0.7967806  1.1401375  1.8170073
+##  [1] -0.8233651  0.2303660  0.2196114  0.9351270  0.3205509 -0.5067074
+##  [7] -2.5040938  0.4954390  0.3109478  1.6301557
 ## 
 ## $`2`
-##  [1] 0.54536490 0.07413442 0.24996802 0.51769607 0.35912747 0.77897017
-##  [7] 0.75992781 0.64014099 0.21369437 0.26172001
+##  [1] 0.3229671 0.2853393 0.8142544 0.1147531 0.8897475 0.7898641 0.3646327
+##  [8] 0.2847954 0.7520756 0.9713191
 ## 
 ## $`3`
-##  [1]  1.2125938  2.0346682  2.9396683  1.7078104  0.3590834  0.6184620
-##  [7]  1.1781681  0.2147733 -0.3757248 -0.9741019</code></pre>
+##  [1] 0.2813152 2.3454381 0.8454229 0.8963759 3.0943509 1.3867326 0.9185859
+##  [8] 0.9129321 1.0187961 0.5067579</code></pre>
 <pre class="r"><code># a common idiom is split followed by an lapply
 
 # The following two are the same.
 lapply(split(x,f),mean)</code></pre>
 <pre><code>## $`1`
-## [1] 0.3646575
+## [1] 0.03080314
 ## 
 ## $`2`
-## [1] 0.4400744
+## [1] 0.5589748
 ## 
 ## $`3`
-## [1] 0.8915401</code></pre>
+## [1] 1.220671</code></pre>
 <pre class="r"><code>tapply(x,f,mean,simplify=F)</code></pre>
 <pre><code>## $`1`
-## [1] 0.3646575
+## [1] 0.03080314
 ## 
 ## $`2`
-## [1] 0.4400744
+## [1] 0.5589748
 ## 
 ## $`3`
-## [1] 0.8915401</code></pre>
+## [1] 1.220671</code></pre>
 <pre class="r"><code>library(datasets)
 head(airquality)</code></pre>
 <pre><code>##   Ozone Solar.R Wind Temp Month Day
@@ -3466,21 +3467,21 @@ f1</code></pre>
 <pre><code>##  [1] 1 1 2 2 3 3 4 4 5 5
 ## Levels: 1 2 3 4 5</code></pre>
 <pre class="r"><code>x</code></pre>
-<pre><code>##  [1]  0.1433202  0.3876847  0.6168717 -1.5992905  0.8037860 -1.3239589
-##  [7] -1.5236684 -0.8113677  0.6628268 -0.9765289</code></pre>
+<pre><code>##  [1]  0.2978151  1.1276708  1.5162669  0.4358483 -1.3424661  0.6168657
+##  [7] -0.7011900 -0.1860607 -0.4281226 -0.7241011</code></pre>
 <pre class="r"><code>y &lt;-data.frame(x,f1,f2)
 y</code></pre>
 <pre><code>##             x f1 f2
-## 1   0.1433202  1  1
-## 2   0.3876847  1  1
-## 3   0.6168717  1  2
-## 4  -1.5992905  1  2
-## 5   0.8037860  1  3
-## 6  -1.3239589  2  3
-## 7  -1.5236684  2  4
-## 8  -0.8113677  2  4
-## 9   0.6628268  2  5
-## 10 -0.9765289  2  5</code></pre>
+## 1   0.2978151  1  1
+## 2   1.1276708  1  1
+## 3   1.5162669  1  2
+## 4   0.4358483  1  2
+## 5  -1.3424661  1  3
+## 6   0.6168657  2  3
+## 7  -0.7011900  2  4
+## 8  -0.1860607  2  4
+## 9  -0.4281226  2  5
+## 10 -0.7241011  2  5</code></pre>
 <pre class="r"><code>interaction(f1,f2) # interaction computes a factor which represents the interaction of the given factors</code></pre>
 <pre><code>##  [1] 1.1 1.1 1.2 1.2 1.3 2.3 2.4 2.4 2.5 2.5
 ## Levels: 1.1 2.1 1.2 2.2 1.3 2.3 1.4 2.4 1.5 2.5</code></pre>
@@ -3488,26 +3489,26 @@ y</code></pre>
 
 str(split(x,list(f1,f2))) # it will do the interaction function automatically.</code></pre>
 <pre><code>## List of 10
-##  $ 1.1: num [1:2] 0.143 0.388
+##  $ 1.1: num [1:2] 0.298 1.128
 ##  $ 2.1: num(0) 
-##  $ 1.2: num [1:2] 0.617 -1.599
+##  $ 1.2: num [1:2] 1.516 0.436
 ##  $ 2.2: num(0) 
-##  $ 1.3: num 0.804
-##  $ 2.3: num -1.32
+##  $ 1.3: num -1.34
+##  $ 2.3: num 0.617
 ##  $ 1.4: num(0) 
-##  $ 2.4: num [1:2] -1.524 -0.811
+##  $ 2.4: num [1:2] -0.701 -0.186
 ##  $ 1.5: num(0) 
-##  $ 2.5: num [1:2] 0.663 -0.977</code></pre>
+##  $ 2.5: num [1:2] -0.428 -0.724</code></pre>
 <pre class="r"><code># Empty levels can be dropped.
 
 str(split(x,list(f1,f2),drop=TRUE))</code></pre>
 <pre><code>## List of 6
-##  $ 1.1: num [1:2] 0.143 0.388
-##  $ 1.2: num [1:2] 0.617 -1.599
-##  $ 1.3: num 0.804
-##  $ 2.3: num -1.32
-##  $ 2.4: num [1:2] -1.524 -0.811
-##  $ 2.5: num [1:2] 0.663 -0.977</code></pre>
+##  $ 1.1: num [1:2] 0.298 1.128
+##  $ 1.2: num [1:2] 1.516 0.436
+##  $ 1.3: num -1.34
+##  $ 2.3: num 0.617
+##  $ 2.4: num [1:2] -0.701 -0.186
+##  $ 2.5: num [1:2] -0.428 -0.724</code></pre>
 </div>
 <div id="debugging-tools--diagnosing-the-problem" class="section level3">
 <h3>Debugging Tools- Diagnosing the Problem</h3>
@@ -3739,19 +3740,19 @@ makeVector(1:2)</code></pre>
 ##                 x &lt;&lt;- y
 ##                 m &lt;&lt;- NULL
 ##         }
-## &lt;environment: 0x104894468&gt;
+## &lt;environment: 0x13b5fff38&gt;
 ## 
 ## $get
 ## function() x
-## &lt;environment: 0x104894468&gt;
+## &lt;environment: 0x13b5fff38&gt;
 ## 
 ## $setmean
 ## function(mean) m &lt;&lt;- mean
-## &lt;environment: 0x104894468&gt;
+## &lt;environment: 0x13b5fff38&gt;
 ## 
 ## $getmean
 ## function() m
-## &lt;environment: 0x104894468&gt;</code></pre>
+## &lt;environment: 0x13b5fff38&gt;</code></pre>
 <pre class="r"><code>cachemean &lt;- function(x, ...) {
         m &lt;- x$getmean()
         if(!is.null(m)) {
@@ -4464,10 +4465,10 @@ contents of (possibly nested) lists.</li>
 ##     offset, ...)</code></pre>
 <pre class="r"><code>x&lt;-rnorm(100,2,4)
 str(x)</code></pre>
-<pre><code>##  num [1:100] 1.11 -6.41 -5.16 1.08 5.43 ...</code></pre>
+<pre><code>##  num [1:100] -0.452 3.165 0.764 2.155 4.778 ...</code></pre>
 <pre class="r"><code>summary(x)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  -6.406  -1.166   1.646   1.624   3.791  11.589</code></pre>
+##  -6.566  -1.056   1.090   1.614   3.914  10.013</code></pre>
 <pre class="r"><code>f &lt;- gl(40, 10)
 str(f)</code></pre>
 <pre><code>##  Factor w/ 40 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
@@ -4490,7 +4491,7 @@ head(airquality)</code></pre>
 ##  $ Day    : int  1 2 3 4 5 6 7 8 9 10 ...</code></pre>
 <pre class="r"><code>m &lt;- matrix(rnorm(100), 10, 10)
 str(m) # give you the observation in first column</code></pre>
-<pre><code>##  num [1:10, 1:10] -1.131 -1.5103 -0.4385 0.0345 -0.0439 ...</code></pre>
+<pre><code>##  num [1:10, 1:10] 1.308 0.649 1.695 -1.42 -1.435 ...</code></pre>
 <pre class="r"><code>s&lt;-split(airquality, airquality$Month)
 str(s)</code></pre>
 <pre><code>## List of 5
@@ -4551,8 +4552,8 @@ functions</p>
 
 x &lt;-rnorm(10)
 x</code></pre>
-<pre><code>##  [1]  1.6647443 -0.7455670  0.0460090 -0.2450801  0.8095589  0.9233941
-##  [7]  0.7801047 -0.4727310 -0.1735765  3.2461358</code></pre>
+<pre><code>##  [1] -0.5723385618 -0.3354934019  0.9346231271  0.3289819471  1.5890368806
+##  [6]  0.0008005945 -1.5746003096  1.0244559795 -1.6459317398 -0.3786328887</code></pre>
 <pre class="r"><code>x &lt;- rnorm(10,20,2)
 
 set.seed(1)
@@ -4632,7 +4633,7 @@ be done withou performance analysis or profiling</p>
 expression * elapsed itme:” wall clock” time</p>
 <pre class="r"><code>system.time(readLines(&quot;http://www.jhsph.edu&quot;))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.025   0.028   1.081</code></pre>
+##   0.028   0.031   0.830</code></pre>
 <p>The Rprof() function strarts the profiler in R * R must be compiled
 with profiler support ( but this is usually the case) The summaryRprof()
 function summarizes the output from Rprof() (otherwise its not readable)
