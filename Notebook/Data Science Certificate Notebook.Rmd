@@ -2039,6 +2039,503 @@ The summaryRprof() function summarizes the output from Rprof() (otherwise its no
 * Insurance companies -> what your risk of death is
 * Johns Hopkins -> who will succeed in their programs
 
+### Componets of a predictor
+
+*question -> input data -> features -> algorithm -> parameters -> evaluation
+
+example: 
+start with a general question
+can I automatically detect emails that are SPAM that are not
+make it concrete
+Can i use quantitative characteristics of the emails to classify them as SPAM / HAM?
+
+### Relative order of importance:
+question > data > features > algorithms
+
+colleting the right data and the data is relvant to the question you are trying to answer.
+Often more data > better models
+
+Properties of good features
+* lead to data compression
+* retain relevant information
+* are created based on expert application knowledge
+
+Common mistakes
+* trying to automate feature selection
+* not paying attention to data-specific quirks
+* throwing away information unnecessarily
+
+Algorithms matter less than you'd think
+
+The "Best" machine Learning method
+* interpretable, simple, accurate, fast ( to train and test), scalable ( easy to apply to a large dataset.)
+
+### Prediciton is about accuracy tradeoffs
+* interpretability versus accuracy
+* speed versus accuracy
+* simplicity versus accuracy
+* scalability versus accuracy
+
+
+### In sample and out of smaple error
+In sample error: the error rate you get on the same data set you used to build your predictor. Sometimes called resubsititution error.
+
+Out of smaple error: the error rate you get on a new data set. sometimes called generalization error.
+
+Key ides
+1. out of smaple error is what you care about
+2. in sample error < out of smaple error
+3. the reason is overfitting
+* matching your algorithm to the data you have.
+
+Why more sophscated alogrithm yield higher out of sample error"
+* overfitting
++ data have two parts: signal and noise
+* the goal of a predictor is to find signal
+* you can always design a perfect in-sample predictor
+* you capture both signal + noise when you do that
+* predictor won't perform as well on new samples
+
+### Prdiction study design
+1. Define your error rate
+2. Split data into :
+* training, testing, validation (optional)
+3. On thetraining set pick features
+* use cross-validation
+4. ON the training set pick prediction function
+* use cross-validation
+5. If no validation
+* apply 1 time to test set
+6. if validation
+* apply to test set and refine
+* apply 1* to validation
+
+
+#### Avioid small sample sizes. 
+* if you have a lrge sample size
+- 60% training
+- 20% test
+- 20% validation
+
+* if you have a medium sample size
+-60% training
+-40 % testing
+
+*if you have a small sample size
+- do cross validation
+- report caveat of small sample size
+
+#### some principles to remember
+ set the test/validaiton set aside and don't look at it
+ all subsets should reflect as much diversity as possible
+ -you can also try to balance by features - but this is tricky
+ 
+### types of error
+
+sensitivity = tp/(tp+FN)  真得病的有多少可以测出来 recall
+
+specificity = tn/(FP+TN) 真没病的有多少可以测出来
+
+positive predictive value = TP/TP+FP 测出有病的有多少是真有病 precision
+negative predictive value = TN/FN+TN 测出没病的有多少是真没病
+
+accuracy = (TP+TN)/(TP+FP+FN+TN) 测得有多准
+
+For continuous data: mean squared error(MSE): calculate the average of the suqared differences between prediction and truth.
+
+Root mean squared error (RMSE) square root of the previous
+A good measure of the error of the continuos data.
+
+#### common error measures
+1. mean squared error ( continuous data, sensitive to outliers
+2. median absolute deviation
+(continuous data. often more robust)
+2. sensity (recall)
+3. specificity
+4. accuracy
+
+### Receiver Operating Charactristic 
+
+ROC curves
+
+a common way to measure the quality or goodness of a prediction algorithm.
+
+Why a curve?
+* in binary classification you are predicting one of two categories
+
+* but your predictions are ofoten quantitative
+-probability of being alive
+
+* the cutoff you choose gives different results
+
+senstivity( recall) on the y axis (true positive rate)
+(1-specificity) on the x axis (false positive rate)
+
+different point represnt different cutoff
+ 
+this curve shows the tradeoff between specificity and senstivity
+
+AUC area under the cure to compare the performace of different algothrim
+
+if AUC =0 .5: random guessing
+if AUX =1 " perfect classifer
+in general AUC of above 0.8 considered good
+
+### cross validation
+This lecture is about cross validation. Which is one of the most widely used tools, for detecting relevant features, and for building models. And estimating their parameters when doing machine learning.
+
+Approach:
+1. use the training set
+2. split it into training/test sets
+3. build a odel on the training set
+4. evaluate on the test set
+5. repeat and average the estimated errors
+
+used for: 
+1. picking variables to include in a model
+2. picking the tpe of prediction function to use
+3. picking the parameters in the prediction function
+4. compare different predictors
+
+So, the different ways that people can use training and test sets. 
+One example is they do random subsampling. So, imagine that, every observation we're trying to predict is arrayed out along the, this axis here. And the color represents whether we include it in the training set or testing set, so again, this is only the training samples, and what we might do is just take a subsample of them, and call them the testing sample. So in this case, it's the light gray bars here, are all the samples in this particular iteration that we call test samples. Then we would build our predictor on all the dark gray samples. And so, again, this is only within the training set. We take the dark gray samples and build a model, and then apply it to predict the light gray samples, and evaluate their accuracy. We can do this, for several different random subsamples. So this is a ra, one random sampling. And then this second row is the second random sampling. And this third row is the third random sampling. Do that over and over again, and then average what the errors will be.
+
+Another way is called K-fold cross validation
+
+another way is called leave one out cross validation
+
+Considerations
+* for time series data, data must be used in "chunks"
+* for k-fold cross validation
+ + larger k= less bias, more variance
+ + smaller k = more bias, less variamce
+* random sampling must be done without replacement
+* random sampling with replacement is the bootstrap
++ underestimates of the erorr
++ can be corrected, but it is complicated
+
+* if you cross-validate to pick predictors estimate you must estimate errors on independent data.
+
+##  Week 8.2 Caret package
+
+### Caret functionality
+
+* some preprocessing (cleanihng)
+  + preProcess
+* Data spliting
+  + createDataPartition
+  + createResample
+  + createTimeSlices
+  
+* Training/testing functions
+  + train
+  + predict
+
+* Model comparison
+  + confusionMatrix
+  
+### Machine Learning algorithms in R
+* Linear discriminant analysis
+* Regression
+* Naive Bayes
+* Support vector machines
+* Classification and regression trees
+* Random forests
+* Boosting
+* etc.
+
+SPAM Example: Data splitting
+
+```{r}
+library(caret)
+# install.packages("kernlab")
+library(kernlab);data(spam) # load the spam dataset
+
+inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE) # split the data set in to 75% training
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+dim(training)
+```
+
+SPAM Example: Fit a model
+
+```{r}
+set.seed(32343)
+modelFit <- train(type~., data=training, method="glm")
+modelFit
+
+modelFit$finalModel # get the details of the fitted model parameter.
+
+predictions <- predict(modelFit, newdata=testing)
+predictions
+
+```
+
+SPAM Example: Confusion Matrix
+
+check the model preformance
+
+```{r}
+# confusionMatrix(predicitons, testing$type)
+```
+
+### Data slicing
+
+SPAM Example: Data splitting
+
+Use createDataPartition to separate training set and test set.
+```{r}
+library(caret)
+library(kernlab);data(spam) # load the spam dataset
+
+# create an indicator function.
+inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE) # split the data set in to 75% training
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+dim(training)
+```
+
+
+SPAM Example: K-fold of the training set
+```{r}
+set.seed(32323)
+folds <- createFolds(y=spam$type, k=10, list=T, returnTrain=T)
+
+sapply(folds, length)
+folds[[1]][1:10]
+table(unlist(folds)) # each observation to be used in 9 of the folds.
+
+# returntraina: logical. When true, the values returned are the sample positions corresponding to the data used during training. This argument only works in conjunction with list = TRUE
+
+```
+SPAM Example: Return test
+```{r}
+set.seed(32323)
+folds <- createFolds(y=spam$type, k=10, list=T, returnTrain=F)
+sapply(folds, length)
+folds[[1]][1:10]
+
+# if return Train is fals, then it would be ten folds for the test set.
+
+```
+
+SPAM Example: Resampling
+
+```{r}
+set.seed(32323)
+folds <- createResample(y=spam$type, times=10,list=T)
+sapply(folds, length)
+folds[[1]][1:10]
+# sampling with replacement.
+
+```
+
+SPAM Example: Time slices
+
+```{r}
+set.seed(32323)
+tme <- 1:1000
+folds <- createTimeSlices(y=tme, initialWindow = 20 , horizon=10)
+names(folds)
+folds$train[[1]]
+folds$test[[1]]
+
+```
+
+### Training options
+
+```{r}
+library(caret)
+library(kernlab);data(spam) # load the spam dataset
+
+# create an indicator function.
+inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE) # split the data set in to 75% training
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+dim(training)
+
+modelFit <- train(type~., data=training, method="glm")
+modelFit
 
 
 
+
+```
+
+### Ploting predictors
+
+```{r}
+# install.packages("ISLR")
+library(ISLR)
+library(ggplot2)
+library(caret)
+data(Wage)
+summary(Wage)
+
+# get training/test sets
+inTrain <- createDataPartition(y=Wage$wage, p=0.7, list=F)
+
+training <- Wage[inTrain,]
+testing <- Wage[-inTrain,]
+
+dim(training);
+dim(testing)
+
+
+```
+
+```{r}
+# feature plot( caret package )
+featurePlot(x=training[,c("age","education","jobclass")],
+  y=training$wage,
+  plot="pairs")
+
+# Qplot (ggplot2 package)
+qplot(age,wage,data=training)
+
+# Qplot with color (ggplot2 package)
+qplot(age,wage,colour=jobclass, data=training)
+
+
+# add regression smoothers (ggplot2 package)
+qq <- qplot(age, wage, colour=education, data=training)
+qq + geom_smooth(method='lm', formula=y~x)
+
+# cut2, makin factors (Hmisc package)
+# install.packages("Hmisc")
+# change wage variable into different category
+library(Hmisc)
+cutWage <- cut2(training$wage, g=3)
+table(cutWage)
+
+
+p1 <- qplot(cutWage, age, data=training, fill=cutWage, geom=c("boxplot"))
+
+p1
+
+# Boxplots with points overlayed
+p2 <- qplot(cutWage, age, data=training, fill=cutWage,geom=c("boxplot","jitter"))
+
+# put two picures together.
+# grid.arrange(p1,p2,ncol=2)
+
+
+# Tables
+
+t1 <- table(cutWage,training$jobclass)
+t1
+
+prop.table(t1,1) # proportion
+
+# Density plots
+
+qplot(wage, colour=education, data=training, geom="density")
+
+```
+  
+Notes:
+* Make your plots only in the training set
+  + Don't use the test set for exploration!
+* Things you should be looking for
+  + imbalance in outcomes/predictors
+  + outliers
+  + groups of points not explained by a predictor
+  + skewed variables
+  
+### Basic preprocessing the predicator
+
+
+```{r}
+library(caret)
+library(kernlab);data(spam) # load the spam dataset
+
+# create an indicator function.
+inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE) # split the data set in to 75% training
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+hist(training$capitalAve, main="", xlab="ave. capital run length")
+
+
+mean(training$capitalAve)
+sd(training$capitalAve)
+# we found that variable is skewed and highly variable
+
+# standardizing
+
+trainCapAve <- training$capitalAve
+trainCapAveS <- (trainCapAve - mean(trainCapAve))/sd(trainCapAve)
+mean(trainCapAveS)
+sd(trainCapAveS)
+
+# standardizing -test
+testCapAve <- testing$capitalAve
+testCapAveS <-(testCapAve - mean(trainCapAve))/sd(trainCapAve)
+mean(testCapAveS)
+sd(testCapAveS)
+
+# standardizing - preProcess function (built in caret)
+preObj <- preProcess(training[,-58], method = c("center","scale")) # center every variable and scale every variable except for the outcome variable
+
+trainCapAveS <- predict(preObj, training[,-58])$capitalAve
+mean(trainCapAveS)
+sd(trainCapAveS)
+
+# apply the same preproces to the testset!
+
+testCapAveS <- predict(preObj, testing[,-58])$capitalAve
+mean(testCapAveS)
+sd(testCapAveS)
+
+# you can pas the preProcess in the train as an argument
+modelFit <- train(type~., data=training, preProcess=c("center","scale"), method="glm")
+modelFit
+
+# another way to standare variable
+# standardizing - Box-Cox transforms
+
+preObj <- preProcess(training[,-58], method=c("BoxCox"))
+trainCapAveS <- predict(preObj, training[,-58])$capitalAve
+par(mfrow=c(1,2)); 
+hist(trainCapAveS); qqnorm(trainCapAveS)
+
+# fill the missing data.
+set.seed(13343)
+
+# make some values NA
+training$capAve <- training$capitalAve
+selectNA <- rbinom(dim(training)[1], size=1,prob=0.05)==1
+training$capAve[selectNA]<-NA
+
+# impute and Standardize
+# install.packages("RANN")
+library(RANN)
+
+
+preObj <- preProcess(training[,-58], method="knnImpute")
+capAve <-predict(preObj, training[,-58])$capAve
+
+# Standardize true values
+capAveTruth <- training$capitalAve
+capAveTruth <- (capAveTruth-mean(capAveTruth))/sd(capAveTruth)
+
+quantile(capAve-capAveTruth) # compare imputed and actual
+
+```
+
+Notes and further reading
+
+Training and test must be preocssed in the same way
+test transformations will likely be imperfect
+  + especially if the test/training sets collected at different times
+careful when transforming factor variables*
+
+
+### Covariate creation
