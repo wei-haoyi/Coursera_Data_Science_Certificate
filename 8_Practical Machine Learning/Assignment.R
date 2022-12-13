@@ -1,4 +1,4 @@
-library(readr)
+
 train <- read.csv("~/Documents/GitHub/Coursera_Data_Science_Certificate/8_Practical Machine Learning/pml-training.csv", na.strings=c("NA","","#DIV/0!"))
 test <- read.csv("~/Documents/GitHub/Coursera_Data_Science_Certificate/8_Practical Machine Learning/pml-testing.csv", na.strings=c("NA","","#DIV/0!"))
 
