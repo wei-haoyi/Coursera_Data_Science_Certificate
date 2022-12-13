@@ -1,0 +1,53 @@
+# You should create one R script called run_analysis.R that does the following. 
+
+#read the datasets
+features <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/features.txt", col.names = c("n","functions"))
+activities <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/activity_labels.txt", col.names = c("code", "activity"))
+subject_test <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/test/subject_test.txt", col.names = "subject")
+x_test <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/test/X_test.txt", col.names = features$functions)
+y_test <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/test/y_test.txt", col.names = "code")
+subject_train <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/train/subject_train.txt", col.names = "subject")
+x_train <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/train/X_train.txt", col.names = features$functions)
+y_train <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/UCI HAR Dataset/train/y_train.txt", col.names = "code")
+
+# Merges the training and the test sets to create one data set.
+
+X <- rbind(x_train, x_test)
+Y <- rbind(y_train, y_test)
+Subject <- rbind(subject_train, subject_test)
+Rawdata <- cbind(Subject, Y, X)
+
+
+# Extracts only the measurements on the mean and standard deviation for each measurement. 
+
+extracts <- Rawdata %>% 
+          select(subject, code, contains("mean"), contains("std"))
+
+# Uses descriptive activity names to name the activities in the data set
+
+extracts$code <- activities[extracts$code, 2]
+
+# Appropriately labels the data set with descriptive variable names. 
+names(extracts)[2] = "activity"
+names(extracts)<-gsub("Acc", "Accelerometer", names(extracts))
+names(extracts)<-gsub("Gyro", "Gyroscope", names(extracts))
+names(extracts)<-gsub("BodyBody", "Body", names(extracts))
+names(extracts)<-gsub("Mag", "Magnitude", names(extracts))
+names(extracts)<-gsub("^t", "Time", names(extracts))
+names(extracts)<-gsub("^f", "Frequency", names(extracts))
+names(extracts)<-gsub("tBody", "TimeBody", names(extracts))
+names(extracts)<-gsub("-mean()", "Mean", names(extracts), ignore.case = TRUE)
+names(extracts)<-gsub("-std()", "STD", names(extracts), ignore.case = TRUE)
+names(extracts)<-gsub("-freq()", "Frequency", names(extracts), ignore.case = TRUE)
+names(extracts)<-gsub("angle", "Angle", names(extracts))
+names(extracts)<-gsub("gravity", "Gravity", names(extracts))
+
+# From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+install.packages("collapse")
+
+secdata <- extracts %>%
+          group_by(subject, activity) %>%
+          summarise_all(mean)
+
+write.table(secdata, "~/Documents/GitHub/Coursera_Data_Science_Certificate/3_Data_cleaning/secdata.txt", row.name=FALSE)
+
