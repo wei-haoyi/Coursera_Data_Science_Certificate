@@ -2539,3 +2539,399 @@ careful when transforming factor variables*
 
 
 ### Covariate creation
+
+Two levels of covariate creation
+
+* Level 1: From raw data to covariate
+* Level 2 : transforming tidy covariates
+
+```{r}
+# Load example data
+library(ISLR); library(caret); data(Wage);
+inTrain <- createDataPartition(y=Wage$wage, p=0.7, list=F)
+training <- Wage[inTrain,]; testing <- Wage[-inTrain,]
+
+
+# Common covariates to add, dummy variables
+table(training$jobclass)
+
+# convert factor variables to indicator variables
+
+dummies <- dummyVars(wage ~ jobclass, data=training)
+head(predict(dummies, newdata=training))
+
+# Removing zero covariates (some variable, no variablility)
+nsv <- nearZeroVar(training, saveMetrics = T)
+nsv
+# So this is a nice way to throw those sort of less meaningful predictors out right away.
+```
+
+Spline basis
+
+```{r}
+
+# install.packages("splines")
+library(splines)
+bsBasis <- bs(training$age, df=3)
+bsBasis
+#  So in this case, we pass at a single variable, in this case, the training set, we take the age variable, and we say we want a third degree polynomial for this variable. So when you do that, you essentially get, you'll get a three-column matrix out. So this is now three new variables. This variable corresponds to age, the actual age values. There are scales for computational purposes.
+# The second column will correspond to something like age squared. So, in other words, you're allowing it to fit a quadratic relationship between age and the outcome. And the third column will correspond to age cubed, so you allow a cubic relationship between age and the outcome. So this'll, if you include these covariates in the model instead of just the age variable when you're fitting a linear regression, you allow for curvy model fitting. 
+
+# fitting curves with splines
+lm1 <- lm(wage ~bsBasis, data=training)
+plot(training$age, training$wage, pch=19, cex=0.5)
+# points(training$age, predict(lm1, newdata=training), col="red", pch=19, cex=0.5)
+
+# splines on the test set
+predict(bsBasis, age=testing$age)
+
+```
+
+### Preprocessing with Principal components Analysis (PCA)
+
+```{r}
+
+library(caret); library(kernlab); data(spam)
+inTrain <- createDataPartition(y=spam$type, p=0.75, list=F)
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+M <- abs(cor(training[,-58]))
+diag(M) <-0
+M
+which(M > 0.8, arr.ind=T)
+
+```
+
+Basic PCA idea
+* We might not need every predictor
+* a weighted combination of predictors might be better
+* We should pick this cobination to capture the "most information" possible
+* benefits
++ reduced number of predictors
++ reduced noise (due to averaging)
+
+You have multipvaraite variables,
+* find a new set of multivariate variables that are uncorrelated and explain as much variance as possible.
+* if you put all the variables together in one matrix, find the best matrix created with fewer variables that explains the orginal data.
+
+
+Correlated predictors
+
+```{r}
+library(caret); library(kernlab); data(spam)
+inTrain <- createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+
+
+M <- abs(cor(training[,-58]))
+diag(M) <- 0
+which(M > 0.8, arr.ind = T)
+
+names(spam)[c(34,32)]
+
+plot(spam[,34],spam[,32])
+
+
+# We could rotate the plot
+x <- 0.71 * training$num415 + 0.71* training$num857
+y <- 0.71 * training$num415 - 0.71* training$num857
+
+
+plot(x,y)
+
+# the sum capture more information than subtraction
+
+
+```
+Related Problems
+
+You have multivariate variables X1, ..., Xn, so X11,....X1m
+* Find a new set of multivariate variables that are uncorrelated and explain as much variance as possible.
+
+* If you put all the variables together in one matrix, find the best matrix created with fewer variables that explains the original data.
+
+The first goal is statistical and the second goal is data compression.
+
+Related solutions - PCA/ SVD
+
+SVD
+if X is a matrix with each variable in a column and each observation in a row then the SVD is a "matrix decomposition"
+
+X=UDV^T
+
+where the columns of U are orthogonal (left singular vectors), the columns of V are orthogonal (right singluar vectors), and D is a diagonal matrix (singular values)
+
+PCA
+The principal components are equal to the right singular values if you first scale (subtract the mean, divide by the standard deviation) the variables.
+
+Principal components in R - prcomp
+
+```{r}
+library(caret); library(kernlab); data(spam)
+smallSpam <- spam[,c(34,32)]
+prComp <- prcomp(smallSpam)
+plot(prComp$x[,1],prComp$x[,2])
+
+prComp$rotation # get the rotation matrx, how it summing up each component.
+
+# PCA on SPAM data
+library(caret); library(kernlab); data(spam)
+typeColor <- ((spam$stype=="spam")*1+1) #spam is red?
+preProc <- preProcess(log10(spam[,-58]+1), method="pca", pcaComp=2)
+spamPC <- predict(preProc, log10(spam[,-58]+1))
+plot(spamPC[,1],spamPC[,2],color=typeColor)
+
+# Preprocessing with PCA
+library(caret); library(kernlab); data(spam)
+inTrain <- createDataPartition(y=spam$type, p=0.75, list=FALSE)
+
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+preProc <- preProcess(log10(training[,-58]+1), method="pca", pcaComp=2)
+trainPC <- predict(preProc, log10(training[,-58]+1))
+# modelFit <- train(training$type ~., method="glm", data=trainPC)
+# 
+# testPC <- predict(preProc, log(testing[,-58]+1))
+# 
+# confusionMatrix(testing$type, predict(modelFit, testPC))
+
+# Alternative
+# modelFit <- train(training$type ~., method="glm", preProcess="pca", data=training)
+# confusionMatrix(testing$type, predict(modelFit, testing))
+
+```
+
+Final thoughts on PCs
+
+* Most useful for linear- type models
+* can make it harder to interpret predictors
+* watch out for outliers
+  + transform first (with logs/ Box Cox)
+  + plot predictors to identify problems
+* For more info see exploratory data analysis
+
+
+## Week 8.3 Predictin with trees, Random Forests, & Model Based predicitons
+
+### Predicting with trees
+
+Key ideas
+* iteratively split variables into groups
+* evaluate "homogeneity" within each group
+* split again if necessary
+
+Pros:
+* Easy to interpret
+* Better performance in nonlinear settings
+
+Cons:
+* Without pruning/ cross-validation can lead to overfitting
+* Harder to estimate uncertainty
+* Results may be variable
+
+Basic Algorithm
+
+* start with all varaibles in one group
+* Find the vvariable/split that best separates the outcomes
+* divide the data into two groups ("leaves") on that split ("node)
+* whithin each split, find the best variable/split that separates the outcomes
+* continue until the groups are too small or sufficiently "pure"
+
+measures of impurity
+1. misclassification error
+2. gini index
+
+  + 0 = perfect puity
+  + 0.5 = no purity
+  
+3. Deviance/ information gain
+  + 0= perfect purity
+  + 1= no purity
+  
+  
+```{r}
+# Example : iris data
+data(iris); library(ggplot2)
+names(iris)
+table(iris$Species)
+
+inTrain <- createDataPartition(y=iris$Species, p=0.7, list=F)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+dim(training);dim(testing)
+
+# qplot(Petal.Width, Sepal.Width, colour=Species, data=training)
+
+library(caret)
+modFit <- train(Species ~., method="rpart", data=training)
+print(modFit$finalModel) # tell me what all the node are and how they split
+
+# plot tree
+plot(modFit$finalModel, uniform=T, main="Classification Tree") 
+text(modFit$finalModel, use.n=T, all=T, cex=.8)
+
+
+
+# Prettier plots
+# install.packages("rattle")
+library(rattle)
+fancyRpartPlot(modFit$finalModel)
+
+# Predicting new values
+predict(modFit, newdata=testing)
+```
+
+Notes and further resources
+*  Classification trees are non-linear models
+  + They use interactions between variables
+  + Data transformations may be less important (monotone transformations )
+  + trees can also be used for regression problems (continuous outcome)
+* Note that three are multiple tree building options in R both in the caret package - party ,rpart and out of the caret package - tree
+
+
+### Bagging
+Bootstrap aggregating (bagging)
+
+Basic idea : 
+ 1. Resample cases and recalculate predictions
+ 2. Average or majority vote
+
+Notes:
+  1. similar bias
+  2. Reduced varaince
+  3. More useful for non-linear functions
+
+```{r}
+
+```
+Bagging is most useful for nonlinear models
+
+### Random Forests
+1. Bootstrap samples
+2. At each split, bootstrap variables
+3. Grow ultiple trees and vote
+
+Pros:
+Accuracy
+
+Cons:
+speed
+interpretabiliyt
+overfitting
+
+```{r}
+data(iris); library(ggplot2)
+
+inTrain <- createDataPartition(y=iris$Species, p=0.7, list=F)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+
+library(caret)
+library(randomForest)
+modFit <- train ( Species ~., data=training, method="rf", prox=T)
+modFit
+
+getTree(modFit$finalModel, k=2) # see the secon tree.
+
+pred <- predict(modFit, testing)
+```
+
+Note
+random forest are usually one of the two top performing algorithms along with boosting in prediction contests.
+random forest are difficult to interpret but often very accurate
+care should be taken to avoid overfitting.
+
+### Boosting
+
+Basic ideas
+1. take lots of (possibly) weak predictors
+2. Weight them and add them up
+3. get a stronger predictor
+
+ada boost
+
+Boosting in R
+Boosting can be used wiht any subset of classifiers
+One Large subclass is gradient boosting
+R packages:
+gbm - boosting with trees.
+mboost - model based boosting
+ada - statistical boosting based on additive logistic regression
+gamBoost for boosting generalized additive models
+
+Wage example
+```{r}
+library(ISLR); data(Wage); library(ggplot2); library(caret);
+Wage <- subset(Wage, select=-c(logwage))
+inTrain <- createDataPartition(y=Wage$wage, p=0.7, list=F)
+training <- Wage[inTrain,]
+testing <- Wage[-inTrain,]
+
+# Fit the model
+modFit <- train(wage~., method="gbm", data=training, verbose=F)
+print(modFit)
+```
+
+### Model BASED prediciton
+
+basic idea
+1. assume the data follow a probabilistic model
+2. use bayes' theorem to identify optimal classifiers
+
+Pros:
+can take advantage of structure of the data
+may be computationally convenient
+arereasonably accurate on real problems
+
+cons:
+make additional assumptions about the data
+ when the model is incorrect you may get reduced accuracy
+ 
+ A range of models use this approach
+ linear discriminant analysis assumes ... is multivariate gaussian with same covariances
+ quadratic discrimant analysis assume .. is multivariate gaussian with different covariance
+ model based prediciton assume more complicate version for the covariance matrix
+ naive abyes assumes independence between features for model building.
+ 
+ 
+```{r}
+data(iris); library(ggplot2)
+names(iris)
+table(iris$Species)
+
+inTrain <- createDataPartition(y=iris$Species, p=0.7, list=F)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+
+modlda = train(Species ~., data=training, method="lda")
+modnb=train(Species~., data=training, method="nb")
+
+plda=predict(modlda, testing)
+pnb= predict(modnb,testing)
+
+table(plda, pnb)
+
+
+```
+ 
+ ## Week 8.4 Regularized regression
+ 
+ regularized regression
+ 
+ Basic idea
+ * Fit a regression model
+ * Penalize ( or shrink) large coefficients
+ 
+ Pros: 
+ can help with the bias/variance tradeoff
+ can help with model selection
+ 
+ Cons:
+ May be computationally demanding on large data sets
+ Does not perform as well as random forests and boosting
+ 
+ Combining predictors
+ 
