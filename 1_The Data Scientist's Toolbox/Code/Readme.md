@@ -6,5 +6,5 @@ setup for the Data Science Apecialization.
 
 ## Files
 
--   DS1_HW1.html: A file documented all the questions and answers.
+-   DS1\_HW1.html: A file documented all the questions and answers.
 -   HelloWorld.md: A file created for question 3.
