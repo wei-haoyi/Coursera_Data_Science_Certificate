@@ -28,5 +28,5 @@ This repository is a Haoyi Wei submission for R Programming course project. It c
 
 ## Files
 DS2_HW3.html: A file documented all the questions and answers.
-DS2_HW3.pdf: A file documented all the questions and answers.
+
 
