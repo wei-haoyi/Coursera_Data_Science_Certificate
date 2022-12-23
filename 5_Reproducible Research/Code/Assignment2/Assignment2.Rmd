@@ -1,0 +1,145 @@
+---
+title: "Assignment2"
+author: "Haoyi Wei"
+date: "2022-12-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Explore the NOAA Storm Database
+
+## Synopsis
+
+The basic goal of this assignment is to expore the NOAA Storm Database and answer some basic questions about severe weather events. The data analyssi aims to addres two questions: (1) Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health? (2) Across the US,, which types of events have the greatest economic consequences?
+
+## Loading and Processing the Raw Data
+
+From the [Coursera website][1], we obtained the storm dataset.
+
+### Read the data
+```{r}
+library(readr)
+storm_data <- read_csv("repdata-data-StormData.csv")
+```
+
+### After reading in the data, we check the first few rows in the datasets
+
+```{r}
+dim(storm_data)
+head(storm_data)
+```
+
+### clean the data
+
+```{r}
+tidy_storm <- storm_data[,c('EVTYPE','FATALITIES','INJURIES', 'PROPDMG', 'PROPDMGEXP', 'CROPDMG', 'CROPDMGEXP')]
+head(tidy_storm)
+```
+
+```{r}
+str(tidy_storm)
+```
+## Results
+### Question 1
+
+Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
+
+```{r}
+
+# check number of missing values
+sum(is.na(tidy_storm[,c('FATALITIES','INJURIES')]))
+
+# make the health demage dataset
+library(dplyr)
+library(tidyr)
+tidy_q1 <- tidy_storm %>%
+          group_by(EVTYPE) %>%
+          summarize(fatalities = sum(FATALITIES), injuries= sum(INJURIES), .groups='drop') %>%
+          mutate(total = fatalities + injuries) %>%
+          select(EVTYPE, total,fatalities, injuries) %>%
+          arrange(-total,-fatalities,-injuries) %>%
+          slice(1:10) %>% # select top ten events
+          mutate(evtype=factor(EVTYPE, levels=EVTYPE)) %>%
+          gather(key = Type, value = Value,total,fatalities,injuries)
+```
+
+```{r}
+# make the plot
+library(ggplot2)
+
+ggplot(tidy_q1, aes(evtype, Value, fill=Type)) +
+          geom_bar(position="dodge",stat="identity") +
+          theme_bw() +
+          theme(axis.text.x= element_text(angle=20, vjust=1, hjust=1)) +
+          xlab("Event Type") +
+          ylab("Fatalities and Injuries") +
+          ggtitle("Number of population health outcomes by top 10 Weather Events") +
+          scale_fill_manual(values=c("yellow","orange","red"))
+
+```
+
+Tornadoes are most harmful with respect to population health
+
+
+### Question 2
+
+```{r}
+unique(storm_data$PROPDMGEXP)
+unique(storm_data$CROPDMGEXP)
+```
+
+create a function to clean the property damage data
+```{r}
+cost <- function(x) {
+  if (x == "H")
+    1E-4
+  else if (x == "K")
+    1E-3
+  else if (x == "M")
+    1
+  else if (x == "B")
+    1E3
+  else
+    1-6
+}
+```
+
+make the plot
+```{r}
+tidy_q2 <- tidy_storm %>% 
+          filter(is.na(CROPDMGEXP)!=1 & is.na(PROPDMGEXP)!=1) %>%
+    mutate(prop_dmg = PROPDMG*sapply(PROPDMGEXP, FUN = cost), 
+           crop_dmg = CROPDMG*sapply(CROPDMGEXP, FUN = cost), .keep="unused") %>%
+    group_by(EVTYPE) %>% 
+    summarize(property = sum(prop_dmg), crop = sum(crop_dmg), .groups='drop') %>%
+    arrange(desc(property), desc(crop)) %>%
+    mutate(total=property+crop) %>%
+    slice(1:10) %>% 
+    gather(key = type, value = value, total, property, crop)
+
+ggplot(data=tidy_q2, aes(reorder(EVTYPE, -value), value, fill=type)) +
+  geom_bar(position = "dodge", stat="identity") + 
+  labs(x="Event Type", y="Count (millions)") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 25, vjust=0.5)) + 
+  ggtitle("Total Cost of Property and Crop Damage by top 10 storm event types") +
+  scale_fill_manual(values=c("red", "blue","yellow"))
+
+```
+
+Across the United States, Flood have the greatest economic consequence.
+
+# Conclusion
+Baed on the analysis the government should consider implementing projects to relief tornado and flood's impact.
+
+## Reference
+
+[Roger D. Peng's Example][2]
+
+
+
+[1]: url "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+[2]: url "https://www.rpubs.com/rdpeng/13396"

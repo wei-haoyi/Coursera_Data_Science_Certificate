@@ -1,0 +1,14 @@
+name: DataScience9_Assignment3
+title: DataScience9_Assignment3
+username:
+account: econhaoyiwei
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7925547
+bundleId: 6660256
+url: https://econhaoyiwei.shinyapps.io/DataScience9_Assignment3/
+when: 1671602039.23655
+lastSyncTime: 1671602039.23656
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Assignment3Slides.html|Assignment3Slides.Rmd|puertoricansinusa.csv

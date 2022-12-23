@@ -1,0 +1,84 @@
+---
+title: "Assignment1_part2"
+author: "Haoyi Wei"
+date: "2022-12-19"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Analyze the ToothGrowth data in the R datasets package.
+
+## Overview
+This project analyze the ToothGrowth data in the R datasets package.
+
+## Load the ToothGrowth data and perform some basic exploratory data analyses
+
+```{r}
+data(ToothGrowth)
+```
+
+## Provide a basic summary of the data
+
+```{r}
+head(ToothGrowth)
+dim(ToothGrowth)
+str(ToothGrowth)
+summary(ToothGrowth)
+
+library(ggplot2)
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+ggplot(ToothGrowth, aes(x=dose, y= len, fill=supp)) +
+          geom_boxplot() +
+          scale_fill_manual(values=c("yellow","orange"))
+```
+
+
+### 1. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+```{r}
+
+library(dplyr)
+# Hypothesis Testing
+dose.5 <- ToothGrowth %>%
+          filter(dose ==0.5)
+dose1 <- ToothGrowth %>%
+          filter(dose ==1)
+dose2 <- ToothGrowth %>%
+          filter(dose ==2)
+```
+
+#### t-test for 0.5 mg/day dose
+```{r}
+t.test(len ~ supp, dose.5)
+```
+
+#### t-test for 1 mg/day dose
+```{r}
+t.test(len ~ supp, dose1)
+```
+
+#### t-test for 2 mg/day dose
+```{r}
+t.test(len ~ supp, dose2)
+```
+
+#### Summarize the results
+
+
+Summarize the results in a table
+```{r}
+dose <- c(0.5, 1.0, 2.0)
+p_value <- c(0.0064, 0.0010, 0.9639)
+cv <- c("1.72, 8.78", "2.80, 9.06", "-3.80, 3.64")
+outcome <- c("Reject null", "Reject null", "Fail to reject null")
+data.frame(dose, cv, p_value, outcome)
+```
+For dose 0.5 and dose 1, the p value are indistinguishable from zero, thus reject the null hypotheses that the supplement types don’t have a difference on tooth growth. 
+
+For dose 2.0, fail to reject the null because the p-value is greater than 0.5.
+
+### Conclusion
+
+For low dose such as 0.5 and 1, OJ is higher than VC, but for dose 2, OJ and VC's effect is inditingusihable.

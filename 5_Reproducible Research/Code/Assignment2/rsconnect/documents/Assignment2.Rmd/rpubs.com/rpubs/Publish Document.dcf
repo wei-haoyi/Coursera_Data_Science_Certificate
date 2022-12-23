@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/985604/61af5a27561a4f7381cd601f816b90d9
+bundleId: https://api.rpubs.com/api/v1/document/985604/61af5a27561a4f7381cd601f816b90d9
+url: http://rpubs.com/econhaoyiwei/985604
+when: 1671427430.9251
+lastSyncTime: 1671427430.9251
