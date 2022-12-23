@@ -1,0 +1,28 @@
+---
+title: "Assignment2"
+author: "Haoyi Wei"
+date: "2022-12-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Peer-graded Assignment: R Markdown Presentation & Plotly
+
+## Relationship between weight and MPG by transmission type
+```{r, echo=FALSE}
+library(plotly)
+data(mtcars)
+
+mtcars$am <- factor(mtcars$am)
+levels(mtcars$am) <- list(Manual=1, Automatic=0)
+mtcars$weight <- mtcars$wt
+mtcars$transmission_type<- mtcars$am
+ggplotly(ggplot(mtcars, aes(x=weight, y=mpg, group=transmission_type, color=transmission_type)) +
+    geom_line() +
+          geom_point())
+
+```
+
