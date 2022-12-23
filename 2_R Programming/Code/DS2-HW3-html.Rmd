@@ -62,7 +62,7 @@ outcome[, 11] <- as.numeric(outcome[, 11])
 
 ## You may get a warning about NAs being introduced; that is okay
 
-hist(outcome[, 11])
+hist(outcome[, 11],main="30-Day Death Rates from Heart Attack", xlab="30-Day Death Rates from Heart Attack")
 ```
 
 # 2 Finding the best hospital in a state

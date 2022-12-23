@@ -1,0 +1,115 @@
+---
+title: "Course4 Exploratory Data Analysis - Assignment 1"
+author: "Haoyi Wei"
+date: "2022-12-22"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Programming Assignment 1
+
+# Instrution
+
+This assignment uses data from the UC Irvine Machine Learning Repository, a popular repository for machine learning datasets. In particular, we will be using the “Individual household electric power consumption Data Set” which I have made available on the course web site:
+
+- Dataset: Electric power consumption [20Mb]
+- Description: Measurements of electric power consumption in one household with a one-minute sampling rate over a period of almost 4 years. Different electrical quantities and some sub-metering values are available.
+The following descriptions of the 9 variables in the dataset are taken from the UCI web site:
+
+- Date: Date in format dd/mm/yyyy
+- Time: time in format hh:mm:ss
+- - Global_active_power: household global minute-averaged active power (in kilowatt)
+- Global_reactive_power: household global minute-averaged reactive power (in kilowatt)
+- Voltage: minute-averaged voltage (in volt)
+- Global_intensity: household global minute-averaged current intensity (in ampere)
+- Sub_metering_1: energy sub-metering No. 1 (in watt-hour of active energy). It corresponds to the kitchen, containing mainly a dishwasher, an oven and a microwave (hot plates are not electric but gas powered).
+- Sub_metering_2: energy sub-metering No. 2 (in watt-hour of active energy). It corresponds to the laundry room, containing a washing-machine, a tumble-drier, a refrigerator and a light.
+- Sub_metering_3: energy sub-metering No. 3 (in watt-hour of active energy). It corresponds to an electric water-heater and an air-conditioner.
+
+Goal: reconstruct four plots
+
+# Review criteria
+
+- Was a valid GitHub URL containing a git repository submitted?
+- Does the GitHub repository contain at least one commit beyond the original fork?
+- Please examine the plot files in the GitHub repository. Do the plot files appear to be of the correct graphics file format?
+- Does each plot appear correct?
+- Does each set of R code appear to create the reference plot?
+
+
+# Get and clean the data
+
+```{r}
+library(dplyr)
+
+## Import the data
+data0 <- read.table("~/Documents/GitHub/Coursera_Data_Science_Certificate/4_Exploratory Data Analysis/Code/household_power_consumption.txt", header=TRUE, sep=";", na.strings = "?", colClasses = c('character','character','numeric','numeric','numeric','numeric','numeric','numeric','numeric'))
+
+# clean the data
+data <- data0 %>%
+          mutate(Date=as.Date(Date, "%d/%m/%Y")) %>% ## Format date to Type Date
+          filter(Date>="2007-02-01" & Date<="2007-02-02") %>% ## Filter data set from Feb. 1, 2007 to Feb. 2, 2007
+          na.omit() %>% ## Remove incomplete observation
+          mutate(datetime=as.POSIXct(paste(Date,Time),format="%Y-%m-%d %H:%M:%S")) %>% #add time date column
+          select(-c(Date,Time)) %>%
+          relocate(datetime)
+```
+# Plot 1
+```{r}
+## plot 1
+## Create the histogram
+hist(data$Global_active_power, main="Global Active Power", xlab = "Global Active Power (kilowatts)", col="red")
+```
+
+# Plot 2
+```{r}
+## plot 2
+## Create Plot 2
+plot(data$Global_active_power~data$datetime, type="l", ylab="Global Active Power (kilowatts)", xlab="Datetime", main="Global Active Power by Time of the Day")
+```
+
+# Plot 3
+```{r}
+with(data, {
+          plot(Sub_metering_1~datetime, type="l",
+               ylab="Energy Sub Metering", xlab="Datetime", main="Global Active Power by Time of the Day and Meter Type")
+          lines(Sub_metering_2~datetime,col='Red')
+          lines(Sub_metering_3~datetime,col='Blue')
+})
+legend("topright", col=c("black", "red", "blue"), lwd=c(1,1,1), 
+       c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+
+```
+
+# Plot 4
+```{r}
+# par can be used to set graphical parameters
+par(mfrow=c(2,2), mar=c(4,4,2,1), oma=c(0,0,2,0))
+with(data, {
+          plot(Global_active_power~datetime, type="l", 
+               ylab="Global Active Power", xlab="Datetime")
+          plot(Voltage~datetime, type="l", 
+               ylab="Voltage", xlab="Datetime")
+          plot(Sub_metering_1~datetime, type="l", 
+               ylab="Global Sub Metering)", xlab="Datetime")
+          lines(Sub_metering_2~datetime,col='Red')
+          lines(Sub_metering_3~datetime,col='Blue')
+          legend("topright", col=c("black", "red", "blue"), lty=1, lwd=2, bty="n",
+                 legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+          plot(Global_reactive_power~datetime, type="l", 
+               ylab="Global Rective Power",xlab="Datetime")
+})
+```
+
+

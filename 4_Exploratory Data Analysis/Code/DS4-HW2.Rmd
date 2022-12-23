@@ -1,0 +1,205 @@
+---
+title: "Course4 Exploratory Data Analysis - Assignment 2"
+author: "Haoyi Wei"
+date: "2022-12-22"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Programming Assignment 2
+
+# Instrution
+
+Fine particulate matter (PM2.5) is an ambient air pollutant for which there is strong evidence that it is harmful to human health. In the United States, the Environmental Protection Agency (EPA) is tasked with setting national ambient air quality standards for fine PM and for tracking the emissions of this pollutant into the atmosphere. Approximatly every 3 years, the EPA releases its database on emissions of PM2.5. This database is known as the National Emissions Inventory (NEI). You can read more information about the NEI at the EPA National Emissions Inventory web site.
+
+For each year and for each type of PM source, the NEI records how many tons of PM2.5 were emitted from that source over the course of the entire year. The data that you will use for this assignment are for 1999, 2002, 2005, and 2008.
+
+The overall goal of this assignment is to explore the National Emissions Inventory database and see what it say about fine particulate matter pollution in the United states over the 10-year period 1999–2008. You may use any R package you want to support your analysis.
+
+Questions
+
+You must address the following questions and tasks in your exploratory analysis. For each question/task you will need to make a single plot. Unless specified, you can use any plotting system in R to make your plot.
+
+- Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? Using the base plotting system, make a plot showing the total PM2.5 emission from all sources for each of the years 1999, 2002, 2005, and 2008.
+- Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (
+fips == "24510"
+fips == "24510") from 1999 to 2008? Use the base plotting system to make a plot answering this question.
+- Of the four types of sources indicated by the 
+type
+type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? Which have seen increases in emissions from 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
+- Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+- How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+- Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (
+fips == "06037"
+fips == "06037"). Which city has seen greater changes over time in motor vehicle emissions?
+
+# Review criteria
+
+For each question
+
+- Does the plot appear to address the question being asked?
+- Is the submitted R code appropriate for construction of the submitted plot?
+
+# Load the data
+```{r}
+# load the data
+
+NEI <- readRDS("~/Documents/GitHub/Coursera_Data_Science_Certificate/4_Exploratory Data Analysis/Code/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("~/Documents/GitHub/Coursera_Data_Science_Certificate/4_Exploratory Data Analysis/Code/exdata-data-NEI_data/Source_Classification_Code.rds")
+```
+
+# Answer the questions
+1. Have total emission from PM2.5 decreased in US from 1999 to 2008?
+```{r}
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+totalNEI <- collap(NEI, Emissions ~ year, FUN=list(sum))
+
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g1 <- ggplot(totalNEI, aes(year, Emissions))
+g1 + 
+          geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+          geom_line(color="grey") +
+          theme_ipsum() +
+          ggtitle("Evolution of U.S. PM2.5 Emission") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+2. Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == "24510") from 1999 to 2008? Use the base plotting system to make a plot answering this question.
+```{r}
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+library(dplyr)
+
+baltNEI <- NEI %>%
+          filter(fips==24510)
+totalNEI <- collap(baltNEI, Emissions ~ year, FUN=list(sum))
+
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g2 <- ggplot(totalNEI, aes(year, Emissions))
+g2 + 
+          geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+          geom_line(color="grey") +
+          theme_ipsum() +
+          ggtitle("Evolution of Baltimore City PM2.5 Emission") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+
+3. Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? Which have seen increases in emissions from 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
+
+```{r}
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+library(dplyr)
+
+baltNEI <- NEI %>%
+          filter(fips==24510)
+totalNEI <- collap(baltNEI, Emissions ~ type+year, FUN=list(sum))
+totalNEI$type <- as.factor(totalNEI$type )
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g2 <- ggplot(totalNEI, aes(year, Emissions))
+g2 + 
+          facet_wrap(~type, nrow=1) +
+          geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+          geom_smooth(method="lm") +
+          ggtitle("Evolution of Baltimore City PM2.5 Emission") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+
+4. Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+```{r}
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+library(dplyr)
+
+USSCC <- SCC %>%
+          filter(grepl("(.*)(Comb)(.*)(Coal)(.*)", EI.Sector))
+USNEI <- inner_join(NEI, USSCC, by="SCC")
+
+totalNEI <- collap(USNEI, Emissions ~ year, FUN=list(sum))
+
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g4 <- ggplot(totalNEI, aes(year, Emissions))
+g4 + 
+          geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+          geom_smooth(method="lm") +
+          ggtitle("Emissions of PM 2.5 from coal combustion-related sources by year") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+5. How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+```{r}
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+library(dplyr)
+
+BSCC <- SCC %>%
+          filter(grepl("(.*)(Highway Veh)(.*)", Short.Name))
+USNEI <- inner_join(NEI, BSCC, by="SCC")  %>%
+          filter(fips==24510)
+
+totalNEI <- collap(USNEI, Emissions ~ year, FUN=list(sum))
+
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g5 <- ggplot(totalNEI, aes(year, Emissions))
+g5 + 
+          geom_point(shape=21, color="black", fill="#69b3a2", size=6) +
+          geom_smooth(method="lm") +
+          ggtitle("Emissions of PM 2.5 from motor vehicles by year in Baltimore City") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+6. How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+```{r}
+
+library(collapse)
+library(ggplot2)
+library(hrbrthemes)
+library(dplyr)
+
+BSCC <- SCC %>%
+          filter(grepl("(.*)(Highway Veh)(.*)", Short.Name))
+NEI$fips <- as.numeric(NEI$fips)
+
+BNEI <- inner_join(NEI, BSCC, by="SCC") %>%
+          filter(fips==06037|fips==24510)
+
+totalNEI <- collap(BNEI, Emissions ~ fips+year, FUN=list(sum))
+
+totalNEI$fips <- as.factor(totalNEI$fips )
+
+options(scipen =999) # dont want to see the scientific notations in the numbers and charts
+g6 <- ggplot(totalNEI, aes(year, Emissions))
+g6 + 
+          geom_point(aes(color=fips)) +
+          geom_smooth(method="lm",aes(color=fips)) +
+          ggtitle("Emissions of PM 2.5 from motor vehicles by year") +
+          labs(x="Year", y="Amount of Emissions (kilotones)") +
+          scale_color_manual(labels=c('Baltimore City','Los Angeles County'), values=c("blue","red")) +
+          theme(axis.text.y= element_text(angle=90, vjust=1, hjust=1))  # make the y lab vertical
+```
+
+
