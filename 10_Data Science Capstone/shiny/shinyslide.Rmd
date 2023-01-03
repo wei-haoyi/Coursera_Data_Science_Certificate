@@ -1,0 +1,46 @@
+---
+title: "Peer-graded Assignment: Final Project Submission"
+author: "Haoyi Wei"
+date: "2023-1-3"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Project Requirement
+This peer assessed assignment has two parts.
+
+- A Shiny app that takes as input a phrase (multiple words) in a text box input and outputs a prediction of the next word.
+
+- A slide deck consisting of no more than 5 slides created with R Studio Presenter (https://support.rstudio.com/hc/en-us/articles/200486468-Authoring-R-Presentations) pitching your algorithm and app as if you were presenting to your boss or an investor.
+
+## Data Source: SwiftKey
+
+The data is from [SwiftKey](https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip). It consists of text files that were gathered from Twitter and different blogs and news sources. The data are large text files with over 4 million lines combined. This combination should represent general words used nowadays.
+
+I used a random sample of 25% from the raw data to build the final model.
+
+The following calculations are done in the server :
+
+- Make and Load final data.
+- Load the self-made function that can do the next-word prediction.
+- Load the predicitons.
+
+## Methods - How to Make Prediction?
+
+1. Make final dataset: combine the text from english version twitter, news and blogs, subset the dataset to 1 million lines and then do the tokenization using package `corpus` and function `term_stats`. This package and related function can get unigram, bigram, trigram, and their related frequencies. Separate out the last word of those grams as the prediction. To increase the weight of bigram and trigram, I multiply their weight by 10,000 and 10,0000, respectively. So the word pattern matched in trigram would be most preferred.  
+
+2. Take a sentence as input and keep the last two words, combine the last two word and one word as a column and matched it with the final dataset phrases. Ranked the frequencies and display the preditions from high frequencies to low frequenices. If there is no input, or input could not find matched pattern, the output would be the most frequent unigram.
+
+
+
+
+## Shiny App
+
+[Link](https://econhaoyiwei.shinyapps.io/finalapp/)
+
+```{r, echo = FALSE}
+knitr::include_app("https://econhaoyiwei.shinyapps.io/finalapp/")
+```

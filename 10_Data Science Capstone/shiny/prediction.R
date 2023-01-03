@@ -12,8 +12,6 @@ library(corpus)
 library(tm)
 library(stringr)
 
-setwd("/Users/wei/Documents/GitHub/Coursera_Data_Science_Certificate/10_Data Science Capstone/shiny")
-
 # Parse tokens from input text
 
 load("final.Rdata")

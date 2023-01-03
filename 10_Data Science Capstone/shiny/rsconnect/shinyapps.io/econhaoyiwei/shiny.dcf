@@ -1,0 +1,14 @@
+name: shiny
+title: shiny
+username:
+account: econhaoyiwei
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7970267
+bundleId: 6694197
+url: https://econhaoyiwei.shinyapps.io/shiny/
+when: 1672772279.963
+lastSyncTime: 1672772279.96301
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: bad_words.txt|coursera.png|data-construction.R|shinyslide.html|shinyslide.Rmd
