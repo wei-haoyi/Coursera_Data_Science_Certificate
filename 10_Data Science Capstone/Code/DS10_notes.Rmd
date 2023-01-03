@@ -1,0 +1,809 @@
+---
+title: "Data Science Capstone"
+author: "Haoyi Wei"
+date: "2022-12-27"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Project Overview
+Around the world, people are spending an increasing amount of time on their mobile devices for email, social networking, banking and a whole range of other activities. But typing on mobile devices can be a serious pain. SwiftKey, our corporate partner in this capstone, builds a smart keyboard that makes it easier for people to type on their mobile devices. One cornerstone of their smart keyboard is predictive text models. When someone types:
+
+I went to the
+
+the keyboard presents three options for what the next word might be. For example, the three words might be gym, store, restaurant. In this capstone you will work on understanding and building predictive text models like those used by SwiftKey.
+
+This course will start with the basics, analyzing a large corpus of text documents to discover the structure in the data and how words are put together. It will cover cleaning and analyzing text data, then building and sampling from a predictive text model. Finally, you will use the knowledge you gained in data products to build a predictive text product you can show off to your family, friends, and potential employers.
+
+You will use all of the skills you have learned during the Data Science Specialization in this course, but you'll notice that we are tackling a brand new application: analysis of text data and natural language processProject Overview
+Around the world, people are spending an increasing amount of time on their mobile devices for email, social networking, banking and a whole range of other activities. But typing on mobile devices can be a serious pain. SwiftKey, our corporate partner in this capstone, builds a smart keyboard that makes it easier for people to type on their mobile devices. One cornerstone of their smart keyboard is predictive text models. When someone types:
+
+I went to the
+
+the keyboard presents three options for what the next word might be. For example, the three words might be gym, store, restaurant. In this capstone you will work on understanding and building predictive text models like those used by SwiftKey.
+
+This course will start with the basics, analyzing a large corpus of text documents to discover the structure in the data and how words are put together. It will cover cleaning and analyzing text data, then building and sampling from a predictive text model. Finally, you will use the knowledge you gained in data products to build a predictive text product you can show off to your family, friends, and potential employers.
+
+You will use all of the skills you have learned during the Data Science Specialization in this course, but you'll notice that we are tackling a brand new application: analysis of text data and natural language processing. This choice is on purpose. As a practicing data scientist you will be frequently confronted with new data types and problems. A big part of the fun and challenge of being a data scientist is figuring out how to work with these new data types to build data products people love. The capstone will be evaluated based on the following assessments:
+
+An introductory quiz to test whether you have downloaded and can manipulate the data.
+An intermediate R markdown report that describes in plain language, plots, and code your exploratory analysis of the course data set.
+Two natural language processing quizzes, where you apply your predictive model to real data to check how it is working.
+A Shiny app that takes as input a phrase (multiple words), one clicks submit, and it predicts the next word.
+A 5 slide deck created with R presentations pitching your algorithm and app to your boss or investor.
+During the capstone you can get support from your fellow students, from us, and from the engineers at SwiftKey. But we really want you to show your independence, creativity, and initiative. We have been incredibly impressed by your performance in the classes up until now and know you can do great things.
+
+We have compiled some basic natural language processing resources below. You are welcome to use these resources or any others you can find while performing this analysis. One thing to keep in mind is that we do not expect you to become a world's expert in natural language processing. The point of this capstone is for you to show you can explore a new data type, quickly get up to speed on a new application, and implement a useful model in a reasonable period of time. We think NLP is very cool and depending on your future goals may be worth studying more in-depth, but you can complete this project by using your general knowledge of data science and basic knowledge of NLP. 
+
+Here are a few resources that might be good places to start as you tackle this ambitious project.
+
+Text mining infrastucture in R
+CRAN Task View: Natural Language Processing
+Videos and Slides from Stanford Natural Language Processing courseing. This choice is on purpose. As a practicing data scientist you will be frequently confronted with new data types and problems. A big part of the fun and challenge of being a data scientist is figuring out how to work with these new data types to build data products people love. The capstone will be evaluated based on the following assessments:
+
+An introductory quiz to test whether you have downloaded and can manipulate the data.
+An intermediate R markdown report that describes in plain language, plots, and code your exploratory analysis of the course data set.
+Two natural language processing quizzes, where you apply your predictive model to real data to check how it is working.
+A Shiny app that takes as input a phrase (multiple words), one clicks submit, and it predicts the next word.
+A 5 slide deck created with R presentations pitching your algorithm and app to your boss or investor.
+During the capstone you can get support from your fellow students, from us, and from the engineers at SwiftKey. But we really want you to show your independence, creativity, and initiative. We have been incredibly impressed by your performance in the classes up until now and know you can do great things.
+
+We have compiled some basic natural language processing resources below. You are welcome to use these resources or any others you can find while performing this analysis. One thing to keep in mind is that we do not expect you to become a world's expert in natural language processing. The point of this capstone is for you to show you can explore a new data type, quickly get up to speed on a new application, and implement a useful model in a reasonable period of time. We think NLP is very cool and depending on your future goals may be worth studying more in-depth, but you can complete this project by using your general knowledge of data science and basic knowledge of NLP. 
+
+Here are a few resources that might be good places to start as you tackle this ambitious project.
+
++ [Text mining infrastucture in R](https://www.jstatsoft.org/article/view/v025i05)
++ [CRAN Task View: Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html)
++ Videos and [Slides](coursehttps://web.stanford.edu/~jurafsky/NLPCourseraSlides.html) from Stanford Natural Language Processing 
+
+# Week 1
+
+## Task 0: Understanding the Problem
+
+1. obtain the data from the course web site
+2. Familiarize yourself with background
+
+### Task 0 - Understanding the problem
+The first step in analyzing any new data set is figuring out: (a) what data you have and (b) what are the standard tools and models used for that type of data. Make sure you have downloaded the data from Coursera before heading for the exercises. This exercise uses the files named LOCALE.blogs.txt where LOCALE is the each of the four locales en_US, de_DE, ru_RU and fi_FI. The data is from a corpus called HC Corpora. See the About the Corpora reading for more details. The files have been language filtered but may still contain some foreign text.
+
+In this capstone we will be applying data science in the area of natural language processing. As a first step toward working on this project, you should familiarize yourself with Natural Language Processing, Text Mining, and the associated tools in R. Here are some resources that may be helpful to you.
+
++ (Natural language processing Wikipedia page)[https://en.wikipedia.org/wiki/Natural_language_processing]
++ (Text mining infrastucture in R)[https://www.jstatsoft.org/article/view/v025i05]
++ (CRAN Task View: Natural Language) Processing[https://cran.r-project.org/web/views/NaturalLanguageProcessing.html]
+
+
+Dataset
+
+This is the training data to get you started that will be the basis for most of the capstone. You must download the data from the Coursera site and not from external websites to start.
+
+(Capstone Dataset)[https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip]
+
+Your original exploration of the data and modeling steps will be performed on this data set. Later in the capstone, if you find additional data sets that may be useful for building your model you may use them.
+
+Tasks to accomplish
+
+1. Obtaining the data - Can you download the data and load/manipulate it in R?
+2. Familiarizing yourself with NLP and text mining - Learn about the basics of natural language processing and how it relates to the data science process you have learned in the Data Science Specialization.
+
+Questions to consider
+
++ What do the data look like?
++ Where do the data come from?
++ Can you think of any other data sources that might help you in this project?
++ What are the common steps in natural language processing?
++ What are some common issues in the analysis of text data?
++ What is the relationship between NLP and the concepts you have learned in the Specialization?
+
+
+### About the Corpora
+
+The corpora are collected from publicly available sources by a web crawler. The crawler checks for language, so as to mainly get texts consisting of the desired language*.
+
+Each entry is tagged with it's date of publication. Where user comments are included they will be tagged with the date of the main entry.
+
+Each entry is tagged with the type of entry, based on the type of website it is collected from (e.g. newspaper or personal blog) 
+
+If possible, each entry is tagged with one or more subjects based on the title or keywords of the entry (e.g. if the entry comes from the sports section of a newspaper it will be tagged with "sports" subject).
+
+In many cases it's not feasible to tag the entries (for example, it's not really practical to tag each individual Twitter entry, though I've got some ideas which might be implemented in the future) or no subject is found by the automated process, in which case the entry is tagged with a '0'.
+
+To save space, the subject and type is given as a numerical code.
+
+Once the raw corpus has been collected, it is parsed further, to remove duplicate entries and split into individual lines. Approximately 50% of each entry is then deleted. Since you cannot fully recreate any entries, the entries are anonymised and this is a non-profit venture I believe that it would fall under Fair Use.
+
+#### Corpus Sample
+
+tagesspiegel.de	2010/12/03	1	7	Er ist weder ein Abzocker noch ein Ausbeuter, er ist kein Betrger, er haut niemanden in die Pfanne oder betrgt ihn um seinen gerechten Anteil, er steht zu seinem Wort und erfllt seine Vertrge sinngem und feilscht nicht wegen irgendwelcher Lcken im Maschendraht des Kleingedruckten der Vertrge.spiegel.de	2010/11/30	1	1,6	Diplomaten sehen Clintons Direktive als Besttigung einer alten Regel: Diezeit.de	2009/10/22	1	2,10	Warum schaffen wir nicht eine Whrung, die diese Aufgaben erfllt anstatt den Forderungen der Geldwirtschaft hinterherzuhecheln, die niemals erfllt werden knnen?
+
+* You may still find lines of entirely different languages in the corpus. There are 2 main reasons for that:1. Similar languages. Some languages are very similar, and the automatic language checker could therefore erroneously accept the foreign language text.2. "Embedded" foreign languages. While a text may be mainly in the desired language there may be parts of it in another language. Since the text is then split up into individual lines, it is possible to see entire lines written in a foreign language.Whereas number 1 is just an out-and-out error, I think number 2 is actually desirable, as it will give a picture of when foreign language is used within the main language.
+
+Content archived from heliohost.org on September 30, 2016 and retrieved via Wayback Machine on April 24, 2017. https://web-beta.archive.org/web/20160930083655/http://www.corpora.heliohost.org/aboutcorpus.html 
+
+## Task 1: Getting and Cleaning the Data
+
+### Introduction
+
+1. Tokenization
+2. Profanity filtering
+
+Task 1 - Getting and cleaning the data
+
+Large databases comprising of text in a target language are commonly used when generating language models for various purposes. In this exercise, you will use the English database but may consider three other databases in German, Russian and Finnish.
+
+The goal of this task is to get familiar with the databases and do the necessary cleaning. After this exercise, you should understand what real data looks like and how much effort you need to put into cleaning the data. 
+
+When you commence on developing a new language, the first thing is to understand the language and its peculiarities with respect to your target. You can learn to read, speak and write the language. Alternatively, you can study data and learn from existing information about the language through literature and the internet. At the very least, you need to understand how the language is written: writing script, existing input methods, some phonetic knowledge, etc.
+
+Note that the data contain words of offensive and profane meaning. They are left there intentionally to highlight the fact that the developer has to work on them.
+
+Tasks to accomplish
+
+1. Tokenization - identifying appropriate tokens such as words, punctuation, and numbers. Writing a function that takes a file as input and returns a tokenized version of it.
+
+2. Profanity filtering - removing profanity and other words you do not want to predict.
+
+Tips, tricks, and hints
+
+1. Loading the data in. Tc(see point 2 below). At least initially, you might want to use a smaller subset of the data. Reading in chunks or lines using R's readLines or scan functions can be useful. You can also loop over each line of text by embedding readLines within a for/while loop, but this may be slower than reading in large chunks at a time. Reading pieces of the file at a time will require the use of a file connection in R. For example, the following code could be used to read the first few lines of the English Twitter dataset:
+
+```{r,eval=FALSE}
+con <- file("en_US.twitter.txt", "r") 
+
+readLines(con, 1) ## Read the first line of text
+
+readLines(con, 1) ## Read the next line of text 
+
+readLines(con, 5) ## Read in the next 5 lines of text 
+
+close(con) ## It's important to close the connection when you are done. 
+```
+
+
+
+See the connections help page for more information.
+
+2. Sampling. To reiterate, to build models you don't need to load in and use all of the data. Often relatively few randomly selected rows or chunks need to be included to get an accurate approximation to results that would be obtained using all the data. Remember your inference class and how a representative sample can be used to infer facts about a population. You might want to create a separate sub-sample dataset by reading in a random subset of the original data and writing it out to a separate file. That way, you can store the sample and not have to recreate it every time. You can use the rbinom function to "flip a biased coin" to determine whether you sample a line of text or not.
+
+### Regular expression
+
+Simplest patterns consists of only of literals. Literals consits words that match exactly.
+
+[We need a way to express](https://www.cae.tntech.edu/local/oreilly/unixnut/ch06_03.htm)
+
++ Whitespace word boundaries
++ sets of literals
++ the beginning and end of a line
++ alternatives ("war" or "peace") Metacharacters to the rescu
+
+some metacharacters represent the start of a line
+```{r,eval=FALSE}
+
+^i think
+
+# will match the lines
+
+# i think we all rule participating
+# i think i have been outed
+# i think i need to go to work
+```
+
+$ represents the end of a line
+```{r,eval=FALSE}
+
+morning$
+          
+# will match the lines
+
+# well they had something this morning
+# then had to catch a tram home in the morning
+# dog obedience school in the morning
+```
+
+We can list a set of characters we will accept at a given point in the match
+```{r,eval=FALSE}
+
+[Bb][Uu][Ss][Hh]
+          
+# will match the lines
+
+# The democrats are playing, "Name the worst thing about Bush"
+# I smellled the desert creosote bush, brownies, BBQ chicken
+# I's listning to Bush - Hurricane (Album Version)
+```
+
+The next thing you can do is combine the things altogether
+```{r,eval=FALSE}
+
+^[Ii] am
+          
+# will match the lines
+
+# i am so angry at my boyfirend
+# I am boycotting the apple store
+# I am so over this.
+```
+
+Similarly you can specify a range of letters [a-z] or [a-zA-Z]; notice that the order doesn't matter
+```{r,eval=FALSE}
+
+^[0-9][a-zA-Z]
+          
+# will match the lines
+
+# 7th inning stretch
+# 2nd half soon to begin
+# 5ft 7 sent from heaven
+```
+
+When used at the beginning of a character class, the [^] is also a metacharacter and indicates matching characters NOT in the indicated class
+```{r,eval=FALSE}
+
+[^?.]$ # do not include question mark or period.
+          
+# will match the lines
+
+# i like basketablls
+# 6 and 9
+# helicopter under water? hmmm
+          
+```
+
+"." is used to refer to any character
+
+```{r,eval=FALSE}
+
+9.11
+          
+# will match the lines
+
+# the post 9-11 rules
+# fron door 9:11
+# 9/11
+          
+```
+
+Another character is the or "|"
+
+This does not mean pipe in the context of regular expresssions; instead it translates to "or"; we can use it to combine two expressions, the subexpressions being called alternatives
+
+```{r,eval=FALSE}
+
+flood|fire
+          
+# will match the lines
+
+# is firewire like usb on none macs?
+# the global flood makes sense ..
+# and the floods,.....
+          
+```
+
+the question mark indicates that the indicated expression is optional
+
+```{r,eval=FALSE}
+
+[Gg]eorge( [Ww]\.)? [Bb]ush
+
+# in the above, we wanted to mathc a "." as a literal period; to do that, we had to "escape" the metacharacter preceding it with a backslash in general, we have to do this for any metacharacter we want to include in our match.
+          
+# will match the lines
+
+# I bet i can spell better than you and george bush combined
+# BBC reported that president george Bush claimed god told him to invage I
+# a bird in the hand is worth two george bushes
+          
+```
+
+
+The * and + signs are metacharacters used to indicate repetion; * means "any number, including none, of the item" and + means "at least one of the item"
+
+```{r,eval=FALSE}
+
+(.*)
+          
+# will match the lines
+
+# anyone wanna chat? (24, m , germany)
+# hello, 20.m here...(east area + drives + webcam)
+# (he means older men)
+# ()
+        
+
+[0-9]+ (.*)[0-9]+ 
+
+# will match the lines  
+
+# working as MP here 720 MP battallion, 42nd birgade
+# so say 2 or 3 years at colleage and 4 at uni makes us 23 when and if we fin
+# Mmmm its time 4 me 2 go 2 bed
+          
+```
+
+{and} are referred to as interval quantifiers; the let us specifiy the minimum and maxmium number of matches of an expression
+
+```{r,eval=FALSE}
+
+[Bb]ush ( +[^ ]+ +){1,5} debate
+          
+# will match the lines
+
+# Bush has historicallly won all major debates he's done.
+# in my view, bush doesn't need these debates..
+# bush doesn't need the debates? maybe you are right
+          
+```
+
+The * is greedy so it always mathes the longest possible string that satifsies the regular expression.
+```{r,eval=FALSE}
+
+^s(.*)s
+          
+# will match the lines
+
+# sitting at starbucks
+# settign up my squl and raisl
+# sore shoulders, stupid ergonomics
+```
+
+IN most implementations of regular expressions, the parentheses not only limit the scope of alternatives divided by a "|", bust also can be used to "remember" text matched by the subexpression enclosed
+
+We refer to the matched text with \1, \2, etc
+```{r,eval=FALSE}
+
++([a-zA-Z]+) +\1 +
+          
+# will match the lines
+
+# time for bed, night night twitter!
+# blah blah blah blah
+# hi anyboday anybody at home
+```
+
+
+Summary
+
++ regular expresion are used in many different languages; not unique to R.
++ Regular expression are composed of literals and metacharacters taht represents sets or classes of characters/words
++ Text processing via regular expressions is a very powerful way to extract data from "unfirendly sources (not all data comes as a CSV file)
++ Used within the functions grep, grepl, sub, gsub and others that involve searching for text strings 
+
+
+### Quiz 1
+
+Load the data
+
+This dataset is fairly large. We emphasize that you don't necessarily need to load the entire dataset in to build your algorithms (see point 2 below). At least initially, you might want to use a smaller subset of the data. Reading in chunks or lines using R's readLines or scan functions can be useful. You can also loop over each line of text by embedding readLines within a for/while loop, but this may be slower than reading in large chunks at a time. Reading pieces of the file at a time will require the use of a file connection in R. 
+
+For example, the following code could be used to read the first few lines of the English Twitter dataset: See the connections help page for more information.
+```{r,eval=FALSE}
+con <- file("en_US.twitter.txt", "r") # file() function open a file
+
+readLines(con, 1) ## Read the first line of text
+
+readLines(con, 1) ## Read the next line of text 
+
+readLines(con, 5) ## Read in the next 5 lines of text 
+
+close(con) ## It's important to close the connection when you are done. 
+```
+
+```{r}
+# load the data
+
+url_directory <-"~/Documents/GitHub/Coursera_Data_Science_Certificate/10_Data Science Capstone/final/en_US/"
+url_twitter <- paste(url_directory, "en_US.twitter.txt", sep = "")
+url_blogs <- paste(url_directory, "en_US.blogs.txt", sep = "")
+url_news <- paste(url_directory, "en_US.news.txt", sep = "")
+
+twitter_file <- readLines(url_twitter, encoding="UTF-8")
+blogs_file <- readLines(url_blogs, encoding="UTF-8")
+news_file <- readLines(url_news, encoding="UTF-8")
+
+```
+
+Substting the data
+
+```{r}
+twitter_subset <- readLines(url_twitter, 5000)
+blogs_subset <- readLines(url_blogs, 5000)
+news_subset <- readLines(url_news, 5000)
+```
+
+
+Q1: The size of the files?
+```{r}
+directory.list<- list(url_twitter, url_blogs, url_news)
+size<-sapply(directory.list, function(x) {file.info(x)$size/1024^2})
+size
+```
+
+A1: 200 MB
+
+Q2: The length of the files?
+```{r}
+filelist <- list(twitter_file, blogs_file,news_file)
+length <-sapply(filelist, function(x) {length(x)})
+length
+```
+
+
+Q3: What is the length of the longest line seen in any of the three en_US data sets? 
+```{r}
+# What is the length of the logest line seen in any of the three en_US data sets?
+long_length <-sapply(filelist, function(x) {summary(nchar(x))[6]})
+long_length
+```
+
+Q4: In the en_US twitter data set, if you divide the number of lines where the word "love" (all lowercase) occurs by the number of lines the word "hate" (all lowercase) occurs, about what do you get?
+
+```{r}
+# Calculate the number of lines where the word "love" and word "hate" occurs
+
+sum(grepl("love", twitter_file))/sum(grepl("hate",twitter_file))
+
+```
+
+Q5: The one tweet in the en_US twitter data set that matches the word "biostats" says what?
+
+```{r}
+twitter_file[grep("biostats", twitter_file)]
+```
+
+Q6: How many tweets have the exact characters "A computer once beat me at chess, but it was no match for me at kickboxing". (I.e. the line matches those characters exactly.)
+
+```{r}
+sum(grepl("A computer once beat me at chess, but it was no match for me at kickboxing", twitter_file))
+```
+
+
+Reference
+[Elisa Villar task 1](https://www.rpubs.com/elisavillar/Getting_and_Cleaning_the_Data)
+
+[Elisa Villar milestone report task 2 and task 3](https://www.rpubs.com/elisavillar/Milestone-Report)
+
+# Week 2
+
+## Task 2: Exploratory Data Analysis
+
+This week, we move on to th next tasks, exploratory data analysis and modeling.
+
+And so two key questions to consider here are, 
+
++ how frequently do certain words appear in the data set and 
++ how frequently do certain pairs of words appear together? 
+
+Once you've considered these basic questions you can move on to kind of more complex ones like, 
+
++ how do triplets of words appear together? Now before we start digging around the data set I'd encourage you to take a moment and do a little bit of thinking.
+
+The first step in building a predictive model for text is understanding the distribution and relationship between the words, tokens, and phrases in the text. The goal of this task is to understand the basic relationships you observe in the data and prepare to build your first linguistic models.
+
+Task 2 - Exploratory Data Analysis
+The first step in building a predictive model for text is understanding the distribution and relationship between the words, tokens, and phrases in the text. The goal of this task is to understand the basic relationships you observe in the data and prepare to build your first linguistic models.
+
+Tasks to accomplish
+
+1. Exploratory analysis - perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora. 
+2. Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.
+
+Questions to consider
+
+1. Some words are more frequent than others - what are the distributions of word frequencies? 
+2. What are the frequencies of 2-grams and 3-grams in the dataset? 
+3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+4. How do you evaluate how many of the words come from foreign languages? 
+5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+
+## Exploratory Data Analysis and Modeling
+
+0. load the packages
+
+```{r}
+library(pryr) # package used to get the size of the file in the R environment
+library(corpus) # corpus is an R text processing package with full suppport for international text (Unicode)
+library(dplyr)
+library(ggplot2)
+library(tm) # package used to remove numbers and strip whitespace from a text document
+library(stringi) # the function checks whether all bytes in a string are in the ascii set 1,2,3,4...,127
+```
+
+
+
+### 1. Download and Read the data from web (Date: Dec 28, 2022)
+
+```{r}
+
+url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+download.file(url, "final_dataset.zip")
+unzip("final_dataset.zip")
+
+us.twitter <- readLines("final/en_US/en_US.twitter.txt", encoding="UTF-8")
+us.blogs <- readLines("final/en_US/en_US.blogs.txt", encoding="UTF-8")
+us.news <- readLines("final/en_US/en_US.news.txt", encoding="UTF-8")
+```
+
+### 2. Overview of the files
+
+To address the questions in Quiz 1:
+
+```{r}
+filelist <- list(us.twitter=us.twitter, us.blogs=us.blogs, us.news=us.news)
+file.summary <- data.frame(File = names(filelist), # file name list
+                           Size = sapply(filelist, function(x) {object_size(x)/1024^2}), # file memory size
+                           Length = sapply(filelist, function(x) {length(x)}), # length of the files
+                           Max.Length = sapply(filelist, function(x) {summary(nchar(x))[6]})) # max line length of each file
+```
+
+Sub_sample the files
+
+```{r}
+us.twit <- us.twitter[1:5000]
+# us.blog <-us.blogs[1:5000]
+# us.new <- us.news[1:5000]
+```
+
+
+Clean the dataset
+
+```{r}
+#1. remove special characters
+us.twit <- iconv(us.twit, "UTF-8","ASCII",sub="")
+
+#2. Remove numbers from text document
+us.twit <- removeNumbers(us.twit)
+
+#3. Remove white spaces from text document
+us.twit <- stripWhitespace(us.twit)
+
+#4. Remove punctuation
+us.twit <- removePunctuation(us.twit)
+
+#5. Set the entire dataset to lower case
+us.twit <- tolower(us.twit)
+
+#6. Profanity filtering - task 1, remove bad words.
+download.file("http://www.cs.cmu.edu/~biglou/resources/bad-words.txt", destfile = "bad_words.txt")
+badword <- readLines("bad_words.txt", encoding="UTF-8")
+us.twit <- removeWords(us.twit, c(badword))
+
+```
+
+[Term Statistics](http://corpustext.com/reference/term_stats.html)
+
+```{r}
+sum.twit.1 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE) # remove punctuation and english stop words (is, this, and....)
+sum.twit.2 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE, ngrams=2) 
+sum.twit.3 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+
+# sum.blog.1 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE)
+# sum.blog.2 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE, ngrams=2)
+# sum.blog.3 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+# 
+# sum.new.1 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE)
+# sum.new.2 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE, ngrams=2)
+# sum.new.3 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+```
+
+#### 2.1. Some words are more frequent than others - what are the distributions of word frequencies?
+#### 2.2. What are the frequencies of 2-grams and 3-grams in the dataset? 
+
+Take twitter as an example
+
+```{r}
+sum.twit.1.20 <- sum.twit.1 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.1.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Unigram - Twitter")
+
+
+
+sum.twit.2.20 <- sum.twit.2 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.2.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Bigram - Twitter")
+
+
+
+sum.twit.3.20 <- sum.twit.3 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.3.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Trigram - Twitter")
+
+```
+
+#### 2.3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+
+```{r}
+# Total unique words in the original US twit
+total.count.twit <- sum(sum.twit.1$count)
+cum_p <- cumsum(sum.twit.1$count)/sum(sum.twit.1$count)
+
+# 50%
+which(cum_p>=0.5)[1]
+
+# 90%
+which(cum_p>=0.9)[1]
+
+```
+
+468 unique words is needed in a frequency sorted dictionary to cover 50% of all word instances in the language
+
+6105 unique words is needed in a frequency sorted dictionary to cover 90% of all word instances in the language
+
+### 2.4. How do you evaluate how many of the words come from foreign languages? 
+
+[Reference 1](https://stackoverflow.com/questions/43049015/removing-text-containing-non-english-character)
+[Reference 2](https://www.rdocumentation.org/packages/stringi/versions/1.2.2/topics/stri_enc_isascii)
+
+```{r}
+us.twit_new <- us.twitter[1:5000]
+sum.us.twit_new <- term_stats(us.twit_new, drop=stopwords_en, drop_punct = TRUE)
+nrow(sum.us.twit_new)-sum(stri_enc_isascii(sum.us.twit_new$term))
+
+no_eng <- stri_enc_isascii(sum.us.twit_new$term)
+(sum.us.twit_new$term)[!no_eng]
+
+```
+
+50 words in the twitter sample come from foreign languages
+
+### 2.5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+classify the words in the dictionary by types (clusters). Category the word in my sample into different clusters and only left one world per cluster for memory saving purpose. 
+
+If word 1 in cluster 1 has been identified in my sample, then all words in that cluster could be used to cover the phrases in the population.
+
+## Task 3: Modeling
+
+The goal here is to build your first simple model for the relationship between words. This is the first step in building a predictive text mining application. You will explore simple models and discover more complicated modeling techniques.
+
+Tasks to accomplish
+
++ Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
++ Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
+
+Questions to consider
+
+1. How can you efficiently store an n-gram model (think Markov Chains)?
+2. How can you use the knowledge about word frequencies to make your model smaller and more efficient?
+3. How many parameters do you need (i.e. how big is n in your n-gram model)?
+4. Can you think of simple ways to "smooth" the probabilities (think about giving all n-grams a non-zero probability even if they aren't observed in the data) ?
+5. How do you evaluate whether your model is any good?
+6. How can you use backoff models to estimate the probability of unobserved n-grams?
+Hints, tips, and tricks
+
+As you develop your prediction model, two key aspects that you will have to keep in mind are the size and runtime of the algorithm. These are defined as:
+
+1. Size: the amount of memory (physical RAM) required to run the model in R
+2. Runtime: The amount of time the algorithm takes to make a prediction given the acceptable input
+
+Your goal for this prediction model is to minimize both the size and runtime of the model in order to provide a reasonable experience to the user.
+
+Keep in mind that currently available predictive text models can run on mobile phones, which typically have limited memory and processing power compared to desktop computers. Therefore, you should consider very carefully (1) how much memory is being used by the objects in your workspace; and (2) how much time it is taking to run your model. Ultimately, your model will need to run in a Shiny app that runs on the shinyapps.io server.
+
+Tips, tricks, and hints
+
+Here are a few tools that may be of use to you as you work on their algorithm:
+
++ object.size(): this function reports the number of bytes that an R object occupies in memory
++ Rprof(): this function runs the profiler in R that can be used to determine where bottlenecks in your function may exist. The profr package (available on CRAN) provides some additional tools for visualizing and summarizing profiling data.
++ gc(): this function runs the garbage collector to retrieve unused RAM for R. In the process it tells you how much memory is currently being used by R.
+
+There will likely be a tradeoff that you have to make in between size and runtime. For example, an algorithm that requires a lot of memory, may run faster, while a slower algorithm may require less memory. You will have to find the right balance between the two in order to provide a good experience to the user.
+
+### Answer
+
+The goal is to extract the word from the bigram and trigram that can be stored and searched based on Markov chain.
+
+Suppose I have the word that can be the first or the second in the trigram. I will have a prediciton for the next word
+
+If there is not, I will serach the word in the bigram database.
+
+If the user does not chose the suggested word and typed a new word, then the new suggestion will display.
+Based on the exploratory analysis proformed, 
+
+
+# Week 3 
+## Task 4 : Prediction Model
+
+The goal of this exercise is to build and evaluate your first predictive model. You will use the n-gram and backoff models you built in previous tasks to build and evaluate your predictive model. The goal is to make the model efficient and accurate. 
+
+Tasks to accomplish
+
+1. Build a predictive model based on the previous data modeling steps - you may combine the models in any way you think is appropriate.
+2. Evaluate the model for efficiency and accuracy - use timing software to evaluate the computational complexity of your model. Evaluate the model accuracy using different metrics like perplexity, accuracy at the first word, second word, and third word.
+Questions to consider
+
+How does the model perform for different choices of the parameters and size of the model?
+How much does the model slow down for the performance you gain?
+Does perplexity correlate with the other measures of accuracy?
+Can you reduce the size of the model (number of parameters) without reducing performance?
+
+# Week 4 
+## Task 5 : Creative Exploration
+
+So far you have used basic models to understand and predict words. In this next task, your goal is to use all the resources you have available to you (from the Data Science Specialization, resources on the web, or your own creativity) to improve the predictive accuracy while reducing computational runtime and model complexity (if you can). Be sure to hold out a test set to evaluate the new, more creative models you are building.
+
+Tasks to accomplish
+
+1. Explore new models and data to improve your predictive model.
+2. Evaluate your new predictions on both accuracy and efficiency. 
+
+Questions to consider
+
+1. What are some alternative data sets you could consider using? 
+2. What are ways in which the n-gram model may be inefficient?
+3. What are the most commonly missed n-grams? Can you think of a reason why they would be missed and fix that? 
+4. What are some other things that other people have tried to improve their model? 
+5. Can you estimate how uncertain you are about the words you are predicting? 
+
+# Week 5 
+
+## Data Product
+
+The goal of this exercise is to create a product to highlight the prediction algorithm that you have built and to provide an interface that can be accessed by others via a Shiny app..
+
+Tasks to accomplish
+
++ Create a data product to show off your prediction algorithm You should create a Shiny app that accepts an n-gram and predicts the next word.
+
+Questions to consider
+
++ What are the most interesting ways you could show off your algorithm?
++ Are there any data visualizations you think might be helpful (look at the Swiftkey data dashboard if you have it loaded on your phone)?
++ How should you document the use of your data product (separately from how you created it) so that others can rapidly deploy your algorithm?
+
+Tips, tricks, and hints
+
+Consider the size of the predictive model you have developed. You may have to sacrifice some accuracy to have a fast enough/small enough model to load into Shiny. 
+
+# Week 6
+
+## Task 7 - Slide Deck
+The goal of this exercise is to "pitch" your data product to your boss or an investor. The slide deck is constrained to be 5 slides or less and should: (1) explain how your model works, (2) describe its predictive performance quantitatively and (3) show off the app and how it works. 
+
+Tasks to accomplish
+
++ Create a slide deck promoting your product. Write 5 slides using RStudio Presenter explaining your product and why it is awesome!
+
+Questions to consider
+
++ How can you briefly explain how your predictive model works?
++ How can you succinctly quantitatively summarize the performance of your prediction algorithm?
++ How can you show the user how the product works?
+
+Tips, tricks, and hints
+
++ The Rstudio presentation information is available here (https://support.rstudio.com/hc/en-us/articles/200486468-Authoring-R-Presentations). 

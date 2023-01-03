@@ -1,0 +1,284 @@
+---
+title: "Milestone Report"
+author: "Haoyi Wei"
+date: "2022-12-27"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Week 2
+
+## Task 2: Exploratory Data Analysis
+
+This week, we move on to th next tasks, exploratory data analysis and modeling.
+
+And so two key questions to consider here are, 
+
++ how frequently do certain words appear in the data set and 
++ how frequently do certain pairs of words appear together? 
+
+Once you've considered these basic questions you can move on to kind of more complex ones like, 
+
++ how do triplets of words appear together? Now before we start digging around the data set I'd encourage you to take a moment and do a little bit of thinking.
+
+The first step in building a predictive model for text is understanding the distribution and relationship between the words, tokens, and phrases in the text. The goal of this task is to understand the basic relationships you observe in the data and prepare to build your first linguistic models.
+
+Task 2 - Exploratory Data Analysis
+The first step in building a predictive model for text is understanding the distribution and relationship between the words, tokens, and phrases in the text. The goal of this task is to understand the basic relationships you observe in the data and prepare to build your first linguistic models.
+
+Tasks to accomplish
+
+1. Exploratory analysis - perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora. 
+2. Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.
+
+Questions to consider
+
+1. Some words are more frequent than others - what are the distributions of word frequencies? 
+2. What are the frequencies of 2-grams and 3-grams in the dataset? 
+3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+4. How do you evaluate how many of the words come from foreign languages? 
+5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+
+## Exploratory Data Analysis and Modeling
+
+0. load the packages
+
+```{r}
+library(pryr) # package used to get the size of the file in the R environment
+library(corpus) # corpus is an R text processing package with full suppport for international text (Unicode)
+library(dplyr)
+library(ggplot2)
+library(tm) # package used to remove numbers and strip whitespace from a text document
+library(stringi) # the function checks whether all bytes in a string are in the ascii set 1,2,3,4...,127
+```
+
+
+
+### 1. Download and Read the data from web (Date: Dec 28, 2022)
+
+```{r}
+
+url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+download.file(url, "final_dataset.zip")
+unzip("final_dataset.zip")
+
+us.twitter <- readLines("final/en_US/en_US.twitter.txt", encoding="UTF-8")
+us.blogs <- readLines("final/en_US/en_US.blogs.txt", encoding="UTF-8")
+us.news <- readLines("final/en_US/en_US.news.txt", encoding="UTF-8")
+```
+
+### 2. Overview of the files
+
+To address the questions in Quiz 1:
+
+Here I provide the basic summaries of the three files. Word counts, line counts, and basic data tables.
+
+```{r}
+filelist <- list(us.twitter=us.twitter, us.blogs=us.blogs, us.news=us.news)
+file.summary <- data.frame(File = names(filelist), # file name list
+                           Size = sapply(filelist, function(x) {object_size(x)/1024^2}), # file memory size
+                           Length = sapply(filelist, function(x) {length(x)}), # length of the files
+                           Max.Length = sapply(filelist, function(x) {summary(nchar(x))[6]})) # max line length of each file
+
+knitr::kable(file.summary)
+```
+
+Sub_sample the files
+
+```{r}
+us.twit <- us.twitter[1:5000]
+# us.blog <-us.blogs[1:5000]
+# us.new <- us.news[1:5000]
+```
+
+
+Clean the dataset
+
+```{r}
+#1. remove special characters
+us.twit <- iconv(us.twit, "UTF-8","ASCII",sub="")
+
+#2. Remove numbers from text document
+us.twit <- removeNumbers(us.twit)
+
+#3. Remove white spaces from text document
+us.twit <- stripWhitespace(us.twit)
+
+#4. Remove punctuation
+us.twit <- removePunctuation(us.twit)
+
+#5. Set the entire dataset to lower case
+us.twit <- tolower(us.twit)
+
+#6. Profanity filtering - task 1, remove bad words.
+download.file("http://www.cs.cmu.edu/~biglou/resources/bad-words.txt", destfile = "bad_words.txt")
+badword <- readLines("bad_words.txt", encoding="UTF-8")
+us.twit <- removeWords(us.twit, c(badword))
+
+```
+
+[Term Statistics](http://corpustext.com/reference/term_stats.html)
+
+```{r}
+sum.twit.1 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE) # remove punctuation and english stop words (is, this, and....)
+sum.twit.2 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE, ngrams=2) 
+sum.twit.3 <- term_stats(us.twit, drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+
+# sum.blog.1 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE)
+# sum.blog.2 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE, ngrams=2)
+# sum.blog.3 <- term_stats(us.blog,drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+# 
+# sum.new.1 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE)
+# sum.new.2 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE, ngrams=2)
+# sum.new.3 <- term_stats(us.new, drop=stopwords_en, drop_punct = TRUE, ngrams=3)
+```
+
+#### 2.1. Some words are more frequent than others - what are the distributions of word frequencies?
+#### 2.2. What are the frequencies of 2-grams and 3-grams in the dataset? 
+
+Take twitter as an example
+
+```{r}
+sum.twit.1.20 <- sum.twit.1 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.1.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Unigram - Twitter")
+
+
+
+sum.twit.2.20 <- sum.twit.2 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.2.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Bigram - Twitter")
+
+
+
+sum.twit.3.20 <- sum.twit.3 %>%
+          slice_head(n=20)
+
+ggplot(sum.twit.3.20, aes(x=count,y=reorder(term, count))) +
+          geom_bar(stat= "identity",
+                   color="black",
+                   fill="lightblue") +
+          geom_text(aes(label=count, hjust=1.5)) +
+          ylab("1-Gram") +
+          xlab("Frequency") +
+          ggtitle("Top 20 Trigram - Twitter")
+
+```
+
+#### 2.3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+
+```{r}
+# Total unique words in the original US twit
+total.count.twit <- sum(sum.twit.1$count)
+cum_p <- cumsum(sum.twit.1$count)/sum(sum.twit.1$count)
+
+# 50%
+which(cum_p>=0.5)[1]
+
+# 90%
+which(cum_p>=0.9)[1]
+
+```
+
+468 unique words is needed in a frequency sorted dictionary to cover 50% of all word instances in the language
+
+6105 unique words is needed in a frequency sorted dictionary to cover 90% of all word instances in the language
+
+### 2.4. How do you evaluate how many of the words come from foreign languages? 
+
+[Reference 1](https://stackoverflow.com/questions/43049015/removing-text-containing-non-english-character)
+[Reference 2](https://www.rdocumentation.org/packages/stringi/versions/1.2.2/topics/stri_enc_isascii)
+
+```{r}
+us.twit_new <- us.twitter[1:5000]
+sum.us.twit_new <- term_stats(us.twit_new, drop=stopwords_en, drop_punct = TRUE)
+nrow(sum.us.twit_new)-sum(stri_enc_isascii(sum.us.twit_new$term))
+
+no_eng <- stri_enc_isascii(sum.us.twit_new$term)
+(sum.us.twit_new$term)[!no_eng]
+
+```
+
+50 words in the twitter sample come from foreign languages
+
+### 2.5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+classify the words in the dictionary by types (clusters). Category the word in my sample into different clusters and only left one world per cluster for memory saving purpose. 
+
+If word 1 in cluster 1 has been identified in my sample, then all words in that cluster could be used to cover the phrases in the population.
+
+## Task 3: Modeling
+
+The goal here is to build your first simple model for the relationship between words. This is the first step in building a predictive text mining application. You will explore simple models and discover more complicated modeling techniques.
+
+Tasks to accomplish
+
++ Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
++ Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
+
+Questions to consider
+
+1. How can you efficiently store an n-gram model (think Markov Chains)?
+2. How can you use the knowledge about word frequencies to make your model smaller and more efficient?
+3. How many parameters do you need (i.e. how big is n in your n-gram model)?
+4. Can you think of simple ways to "smooth" the probabilities (think about giving all n-grams a non-zero probability even if they aren't observed in the data) ?
+5. How do you evaluate whether your model is any good?
+6. How can you use backoff models to estimate the probability of unobserved n-grams?
+Hints, tips, and tricks
+
+As you develop your prediction model, two key aspects that you will have to keep in mind are the size and runtime of the algorithm. These are defined as:
+
+1. Size: the amount of memory (physical RAM) required to run the model in R
+2. Runtime: The amount of time the algorithm takes to make a prediction given the acceptable input
+
+Your goal for this prediction model is to minimize both the size and runtime of the model in order to provide a reasonable experience to the user.
+
+Keep in mind that currently available predictive text models can run on mobile phones, which typically have limited memory and processing power compared to desktop computers. Therefore, you should consider very carefully (1) how much memory is being used by the objects in your workspace; and (2) how much time it is taking to run your model. Ultimately, your model will need to run in a Shiny app that runs on the shinyapps.io server.
+
+Tips, tricks, and hints
+
+Here are a few tools that may be of use to you as you work on their algorithm:
+
++ object.size(): this function reports the number of bytes that an R object occupies in memory
++ Rprof(): this function runs the profiler in R that can be used to determine where bottlenecks in your function may exist. The profr package (available on CRAN) provides some additional tools for visualizing and summarizing profiling data.
++ gc(): this function runs the garbage collector to retrieve unused RAM for R. In the process it tells you how much memory is currently being used by R.
+
+There will likely be a tradeoff that you have to make in between size and runtime. For example, an algorithm that requires a lot of memory, may run faster, while a slower algorithm may require less memory. You will have to find the right balance between the two in order to provide a good experience to the user.
+
+### Answer:
+
+The goal is to extract the word from the bigram and trigram that can be stored and searched based on Markov chain.
+
+Suppose I have the word that can be the first or the second in the trigram. I will have a prediciton for the next word
+
+If there is not, I will serach the word in the bigram database.
+
+If the user does not chose the suggested word and typed a new word, then the new suggestion will display.
+Based on the exploratory analysis proformed, 
